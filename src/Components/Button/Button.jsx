@@ -1,14 +1,15 @@
 import { useNavigate } from "react-router-dom";
+import { memo } from "react";
 
 import styles from "./Button.module.scss";
 
-const Button = ({ children, action, isBack = false }) => {
+const Button = memo(function Button({ children, action, isBack = false }) {
   const navigate = useNavigate();
 
   function handleFunction(e) {
     e.preventDefault();
     if (isBack) {
-      return navigate("/")
+      return navigate("/");
     }
     action();
   }
@@ -21,6 +22,6 @@ const Button = ({ children, action, isBack = false }) => {
       {children}
     </button>
   );
-};
+});
 
 export default Button;

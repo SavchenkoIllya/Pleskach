@@ -1,0 +1,16 @@
+{
+  "files": {
+    "main.css": "/static/css/main.07ecef6b.css",
+    "main.js": "/static/js/main.6782c813.js",
+    "static/media/WhatsApp.png": "/static/media/WhatsApp.c1e9711d10ce34cb424b.png",
+    "static/media/Doctor-PNG-Images2.png": "/static/media/Doctor-PNG-Images2.b146a917f6781830edd2.png",
+    "static/media/Telegram_logo.svg.webp": "/static/media/Telegram_logo.svg.be6948c6962cac4685eb.webp",
+    "index.html": "/index.html",
+    "main.07ecef6b.css.map": "/static/css/main.07ecef6b.css.map",
+    "main.6782c813.js.map": "/static/js/main.6782c813.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.07ecef6b.css",
+    "static/js/main.6782c813.js"
+  ]
+}

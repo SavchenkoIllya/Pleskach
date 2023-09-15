@@ -1,4 +1,5 @@
-import { useLocation, Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
+import { useState, useEffect } from "react";
 import { Helmet } from "react-helmet";
 import ReactMarkdown from "react-markdown";
 
@@ -7,10 +8,20 @@ import PageWrapper from "../Components/PageWrapper/PageWrapper";
 import Heading from "../Components/Heading/Heading";
 import Button from "../Components/Button/Button";
 import styles from "./styles/ArticlePage.module.scss";
+import { articles } from "../assets/articles";
 
 const Articles = () => {
-  const location = useLocation();
-  const { title, content, img } = location.state;
+  const { title } = useParams();
+  const [article, setArticle] = useState({ title: "", img: "", content: "" });
+
+  useEffect(() => {
+    let [filtered] = articles.filter((el) => el.title.toLowerCase() == title);
+    setArticle({
+      title: filtered.title,
+      img: filtered.image,
+      content: filtered.content,
+    });
+  }, []);
 
   return (
     <>
@@ -26,10 +37,10 @@ const Articles = () => {
           <Link to={"/"}>
             <Button isBack={true}>&larr; Вернуться назад</Button>
           </Link>
-          <img src={img} />
+          <img src={article.img} />
           <div className={styles.textContent}>
-            <Heading>{title}</Heading>
-            <ReactMarkdown className={styles.text} children={content} />
+            <Heading>{article.title}</Heading>
+            <ReactMarkdown className={styles.text} children={article.content} />
           </div>
         </section>
       </PageWrapper>

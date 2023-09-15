@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { isMobile } from "react-device-detect";
 import { Helmet } from "react-helmet";
 
@@ -13,24 +13,10 @@ import Form from "../Components/Form/Form";
 import styles from "./styles/MainPage.module.scss";
 import photo from "../assets/Doctor-PNG-Images2.png";
 import { gradient } from "./styles/variables";
+import { articles as content } from "../assets/articles";
 
 const Main = () => {
-  const [articles, setArticles] = useState([]);
-
-  async function logArticles(src) {
-    const response = await fetch(src);
-    const articles = await response.json();
-    return articles;
-  }
-
-  useEffect(() => {
-    let articles = logArticles("http://192.168.178.29:3000/articles.json");
-    articles.then((res) => {
-      if (res) {
-        setArticles((prev) => (prev = res.articles));
-      }
-    });
-  }, []);
+  const [articles, setArticles] = useState(content);
 
   const handleClick = () => {
     console.log("ok");
@@ -84,7 +70,6 @@ const Main = () => {
               <ArticleCard
                 key={idx}
                 title={article.title}
-                content={article.content}
                 img={article.image}
                 id={idx}
               />

@@ -1,0 +1,27 @@
+button {
+  width: fit-content;
+  padding: 1rem 2rem;
+  background: none;
+  border: none;
+  border-radius: 20px;
+  outline: 2px solid #6aa2ed;
+
+  color: #6aa2ed;
+  &:hover {
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    outline: 2px solid #4185df;
+    color: #4185df;
+  }
+}
+
+button.back {
+  outline: none;
+}
+
+button.notBack {
+  &:hover {
+    color: #fff;
+    background: #4185df;
+  }
+}

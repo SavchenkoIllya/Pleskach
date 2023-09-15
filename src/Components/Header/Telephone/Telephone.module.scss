@@ -1,0 +1,21 @@
+.telephone {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  a {
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
+  .icon {
+    width: 20px;
+    height: 20px;
+  }
+
+  .tgIcon {
+    width: 17px;
+    height: 17px;
+  }
+}

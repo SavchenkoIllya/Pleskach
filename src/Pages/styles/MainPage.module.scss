@@ -1,0 +1,47 @@
+.content {
+  display: flex;
+  min-height: 100vh;
+  align-items: center;
+  justify-content: space-between;
+  padding: 2rem;
+  gap: 6rem;
+
+  .primary {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+
+    span {
+      color: #6aa2ed;
+    }
+  }
+
+  img {
+    height: 700px;
+  }
+}
+
+.articlesContent {
+  margin: 8rem 2rem 6rem 2rem;
+
+  .articles {
+    margin-top: 3rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+  }
+
+  @media screen and (max-width: 650px) {
+    padding: 6rem 1rem 6rem 1rem;
+  }
+}
+
+.formWrapper {
+  padding: 4rem;
+  
+  @media screen and (max-width: 650px) {
+    padding: 1rem;
+  }
+}

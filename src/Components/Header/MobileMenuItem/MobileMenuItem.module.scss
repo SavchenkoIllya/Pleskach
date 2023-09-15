@@ -1,0 +1,15 @@
+.mobileList {
+  font-weight: 400;
+  
+  &:last-child {
+    margin-top: 2rem;
+  }
+
+  &:not(:last-child) {
+    &:hover {
+      cursor: pointer;
+      transition: font-weight 0.2s ease-in-out;
+      font-weight: 700;
+    }
+  }
+}

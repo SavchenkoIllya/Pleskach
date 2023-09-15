@@ -1,0 +1,24 @@
+.desktopList {
+  font-weight: 400;
+
+  &:last-child {
+    margin-left: 2rem;
+  }
+
+  &:not(:last-child) {
+    &:hover {
+      cursor: pointer;
+      transition: font-weight 0.2s ease-in-out;
+      font-weight: 700;
+    }
+  }
+}
+
+@media screen and (max-width: 650px) {
+  .desktopList {
+    &:last-child {
+      margin-left: 0;
+      margin-top: 2rem;
+    }
+  }
+}

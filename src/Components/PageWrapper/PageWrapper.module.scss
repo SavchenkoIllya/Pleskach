@@ -1,0 +1,8 @@
+.background {
+  min-height: 100vh;
+
+  .blur {
+    backdrop-filter: blur(100px);
+    height: inherit;
+  }
+}

@@ -1,3 +1,5 @@
+@import "../../variables";
+
 .form {
   background-color: #fff;
   padding: 2rem;
@@ -12,11 +14,12 @@
 
   .slot {
     display: flex;
+    flex-wrap: nowrap;
     align-items: center;
     justify-content: space-between;
     gap: 1rem;
 
-    &:nth-child(3) {
+    &:nth-last-child(3) {
       align-self: flex-start;
       flex-direction: column;
       width: 100%;
@@ -36,10 +39,22 @@
     resize: none;
     width: inherit;
     height: 200px;
+    border: 1px solid transparent;
+
+    &.inputError {
+      transition: all 500ms ease-in-out;
+      border: 1px solid red;
+    }
   }
 
   input {
     text-align: center;
+    border: 1px solid transparent;
+
+    &.inputError {
+      transition: all 500ms ease-in-out;
+      border: 1px solid red;
+    }
   }
 
   input[type="submit"] {
@@ -50,8 +65,8 @@
     border: none;
     border-radius: 32px;
     outline: 2px solid #6aa2ed;
-
     color: #6aa2ed;
+
     &:hover {
       cursor: pointer;
       transition: all 0.2s ease-in-out;
@@ -59,5 +74,11 @@
       color: #fff;
       background: #4185df;
     }
+  }
+
+  .error {
+    @include smallFont;
+    color: red;
+    margin-top: -1rem;
   }
 }

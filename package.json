@@ -10,7 +10,9 @@
     "react-helmet": "^6.1.0",
     "react-icons": "^4.10.1",
     "react-markdown": "^8.0.7",
-    "react-router-dom": "^6.15.0"
+    "react-router-dom": "^6.15.0",
+    "react-spring": "^9.7.2",
+    "react-transition-group": "^4.4.5"
   },
   "scripts": {
     "start": "react-scripts start",

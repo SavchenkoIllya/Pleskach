@@ -2,6 +2,8 @@ import { useState } from "react";
 import { isMobile } from "react-device-detect";
 import { Helmet } from "react-helmet";
 
+import { useTransition } from "react-spring";
+
 import Header from "../Components/Header/Header";
 import PageWrapper from "../Components/PageWrapper/PageWrapper";
 import Heading from "../Components/Heading/Heading";
@@ -9,17 +11,40 @@ import PlaneText from "../Components/PlaneText/PlaneText";
 import Button from "../Components/Button/Button";
 import ArticleCard from "../Components/ArticleCard/ArticleCard";
 import Form from "../Components/Form/Form";
+import Modal from "../Components/Modal/Modal";
 
 import styles from "./styles/MainPage.module.scss";
 import photo from "../assets/Doctor-PNG-Images2.png";
 import { gradient } from "./styles/variables";
 import { articles as content } from "../assets/articles";
+import { isObjectEmpty } from "../utils/isObjectEmpty";
 
 const Main = () => {
-  const [articles, setArticles] = useState(content);
+  const [articles] = useState(content);
+  const [isOpened, setIsOpened] = useState(false);
+  const [messageText, setMessageText] = useState("");
 
   const handleClick = () => {
     console.log("ok");
+  };
+
+  const transitions = useTransition(isOpened, {
+    delay: 0,
+    from: { opacity: 0, overflow: "auto" },
+    enter: { opacity: 1, overflow: "hidden" },
+    leave: { opacity: 0, overflow: "auto" },
+  });
+
+  const handleSubmit = (params, errors) => {
+    if (!isObjectEmpty(errors)) {
+      console.log("submit");
+      console.log(params);
+      setMessageText((prev) => (prev = "Ваше сообщение было отправлено"));
+      setIsOpened((prev) => (prev = true));
+      setTimeout(() => {
+        setIsOpened((prev) => (prev = false));
+      }, 3000);
+    }
   };
 
   return (
@@ -32,7 +57,7 @@ const Main = () => {
 
       <Header />
       <PageWrapper>
-        <section className={styles.content}>
+        <section className={styles.enterContent}>
           <div className={styles.primary}>
             <Heading>
               Ваш <span>сомнолог</span> на каждый день
@@ -77,9 +102,13 @@ const Main = () => {
           </div>
         </section>
         <div className={styles.formWrapper} style={{ background: gradient }}>
-          <Form />
+          <Form onSubmit={handleSubmit} />
         </div>
       </PageWrapper>
+
+      {transitions(({ ...rest }, item) =>
+        item ? <Modal text={messageText} style={rest} /> : null
+      )}
     </>
   );
 };

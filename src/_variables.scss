@@ -29,3 +29,8 @@
   }
   @content;
 }
+
+@mixin smallFont {
+  font-size: 0.8rem;
+  @content;
+}

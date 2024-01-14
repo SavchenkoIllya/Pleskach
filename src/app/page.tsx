@@ -7,10 +7,11 @@ import { Card } from "./ui/card";
 import { articles } from "./assets/articles";
 import { Form } from "./ui/form";
 import { Container } from "./ui/container";
-
+import { Header } from "./ui/header";
 export default function Home() {
   return (
     <>
+      <Header telephone="+79855310868" className="mt-2" />
       <section className="min-h-[100dvh] flex items-center justify-center bg-background">
         <Container className="my-20">
           <article className="flex flex-col-reverse items-center md:justify-between md:flex-row gap-4">

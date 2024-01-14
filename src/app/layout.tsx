@@ -17,10 +17,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ru">
-      <body className={`${inter.className} bg-background`}>
-        <Header telephone="+79855310868" className="mt-2" />
-        {children}
-      </body>
+      <body className={`${inter.className} bg-background`}>{children}</body>
     </html>
   );
 }

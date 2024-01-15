@@ -76,15 +76,13 @@ export const Form = () => {
           {...register("problem")}
         />
       </div>
-      <Button type="submit" style={{ background: "white", color: "#86B6F6" }} className="self-center">
+      <Button
+        type="submit"
+        style={{ background: "white", color: "#86B6F6" }}
+        className="self-center"
+      >
         Отправить
       </Button>
-      {/* <button
-        className="text-sky-500 border-2 border-solid border-sky-500 px-8 py-4 rounded-3xl self-center w-fit bg-none hover:text-white hover:bg-sky-500"
-        type="submit"
-      >
-        Submit
-      </button> */}
     </form>
   );
 };

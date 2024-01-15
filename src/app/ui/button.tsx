@@ -21,7 +21,7 @@ export const Button = ({
   if (href && as === "button") {
     return (
       <a
-        className={`text-white bg-accent py-4 px-8 rounded-[25px] [inline-size:fit-content] hover:cursor-pointer ${className}`}
+        className={`text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 ${className}`}
         href={href}
         {...props}
       >
@@ -33,7 +33,7 @@ export const Button = ({
     const As: any = as;
     return (
       <As
-        className={`text-white bg-accent py-4 px-8 rounded-[25px] [inline-size:fit-content] hover:cursor-pointer ${className}`}
+        className={`text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 ${className}`}
         href={href}
         {...props}
       >
@@ -42,3 +42,7 @@ export const Button = ({
     );
   }
 };
+
+{
+  /* <button type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Default</button> */
+}

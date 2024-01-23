@@ -1,14 +1,43 @@
+"use client";
 import { Heading } from "./ui/heading";
 import { Text } from "./ui/text";
 import Image from "next/image";
 import defaultDoctor from "./assets/Doctor-PNG-Images2.png";
 import { Button } from "./ui/button";
 import { Card } from "./ui/card";
-import { articles } from "./assets/articles";
+// import { articles } from "./assets/articles";
 import { Form } from "./ui/form";
 import { Container } from "./ui/container";
 import { Header } from "./ui/header";
+import { useEffect, useState } from "react";
+import { getArticles } from "./lib/action";
+
+export interface Article {
+  id: number;
+  author_id: number;
+  title: string;
+  content: string;
+  is_published: boolean;
+  creation_date: Date;
+  updating_date?: Date;
+  tags_array: string[];
+  image: string;
+}
+
 export default function Home() {
+  const [articles, setArticles] = useState<Article[]>([]);
+
+  useEffect(() => {
+    const fetchArticles = async () => {
+      const articles = await getArticles();
+      return articles;
+    };
+
+    fetchArticles().then((d) => {
+      setArticles(d as Article[]);
+    });
+  }, []);
+
   return (
     <>
       <Header telephone="+79855310868" className="mt-2" />
@@ -50,7 +79,11 @@ export default function Home() {
               return (
                 <Card
                   key={idx}
-                  link="#"
+                  id={article.id}
+                  link={{
+                    pathname: `/${article.id}`,
+                    query: { title: article.title, content: article.content },
+                  }}
                   title={article.title}
                   imgSrc={article.image}
                   content={article.content}

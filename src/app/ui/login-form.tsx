@@ -3,6 +3,7 @@ import { Button } from "./button";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { authenticate } from "../lib/action";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 type Inputs = {
   email: string;
@@ -16,10 +17,12 @@ export const LoginForm = () => {
     formState: { errors },
   } = useForm<Inputs>();
   const [fetchError, setError] = useState<string>("");
+  const router = useRouter();
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     try {
       await authenticate(data);
+      router.replace("/dashboard/profile");
     } catch (error) {
       console.error("error", error);
       setError("Error during authorization");
@@ -80,7 +83,7 @@ export const LoginForm = () => {
                     {...register("password", { required: true })}
                   />
                 </div>
-                {fetchError && (
+                {!!fetchError && (
                   <div className="self-center text-sm text-red-500">
                     <p>{fetchError}</p>
                   </div>

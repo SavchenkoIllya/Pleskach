@@ -3,34 +3,37 @@ import Image from "next/image";
 import Link from "next/link";
 import { Heading } from "./heading";
 import { Text } from "./text";
+import defaultPicture from "@/app/assets/Medical_Science_Kolleg.jpg";
+import { Remark } from "react-remark";
 
 interface ICard {
+  id: number;
   title: string;
   imgSrc: string;
-  link: string;
+  link: any;
   content: string;
   [propsName: string]: any;
 }
 
-export const Card = ({ title, imgSrc, link, content, ...props }: ICard) => {
+export const Card = ({ title, imgSrc, link, content, id, ...props }: ICard) => {
   return (
     <article
       className="w-[300px] bg-background rounded-lg transition-transform hover:scale-[1.025] shadow-xl shadow-accent/15"
       {...props}
     >
-      <Link href="#">
+      <Link href={link}>
         <img
           className="rounded-t-lg w-[100%]
         [aspect-ratio:4/3]
         [object-fit:cover]
         [object-position:50% 50%]
         "
-          src={imgSrc}
+          src={imgSrc || defaultPicture.src}
           alt=""
         />
       </Link>
       <div className="p-5">
-        <Link href="#">
+        <Link href={link}>
           <Heading
             className="mb-2 h-[64px] tracking-tight text-heading [-webkit-line-clamp:2] 
             [-webkit-box-orient:vertical]   
@@ -39,17 +42,17 @@ export const Card = ({ title, imgSrc, link, content, ...props }: ICard) => {
             {title}
           </Heading>
         </Link>
-        <Text
+        <div
           className="mb-3 [display:-webkit-box] 
-  [-webkit-line-clamp:3] 
-  [-webkit-box-orient:vertical]   
-  [overflow:hidden] text-plane-text
-  h-[72px]"
+                    [-webkit-line-clamp:3] 
+                    [-webkit-box-orient:vertical]   
+                    [overflow:hidden] text-plane-text
+                    h-[72px]"
         >
-          {content}
-        </Text>
+          <Remark>{content}</Remark>
+        </div>
         <Link
-          href="#"
+          href={link}
           className="inline-flex items-center text-sm font-medium text-center text-accent rounded-lg focus:ring-4 focus:outline-none"
         >
           Read more

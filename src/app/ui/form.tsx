@@ -1,6 +1,9 @@
 "use client";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { Button } from "./button";
+import { createPost } from "../lib/action";
+import { useEffect, useState } from "react";
+// import useTimeout from "../utils/hooks/useTimeout";
 
 type Inputs = {
   name: string;
@@ -12,13 +15,29 @@ export const Form = () => {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<Inputs>();
+  const [fetchError, setError] = useState<string>("");
+  const [fetchSuccess, setSuccess] = useState<string>("");
 
-  const onSubmit: SubmitHandler<Inputs> = (data) => {
-    console.log(data);
+  const onSubmit: SubmitHandler<Inputs> = async (data) => {
+    try {
+      await createPost(data);
+      setSuccess(
+        "Your message was successfully sent. Wait when doctor contact you."
+      );
+      reset({
+        name: "",
+        telephone: "",
+        problem: "",
+      });
+    } catch (error) {
+      console.error("error", error);
+      setError("Your message wasn't sent");
+    }
   };
-
+  
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
@@ -76,6 +95,12 @@ export const Form = () => {
           {...register("problem")}
         />
       </div>
+      {!!fetchError && (
+        <p className="self-center text-sm text-red-500">{fetchError}</p>
+      )}
+      {!!fetchSuccess && (
+        <p className="self-center text-sm text-white">{fetchSuccess}</p>
+      )}
       <Button
         type="submit"
         style={{ background: "white", color: "#86B6F6" }}

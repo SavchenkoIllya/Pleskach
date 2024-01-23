@@ -1,8 +1,9 @@
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { sql } from "@vercel/postgres";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import type { NextAuthConfig } from "next-auth";
+import { NextResponse } from "next/server";
 
 export const authConfig = {
   pages: {
@@ -12,14 +13,22 @@ export const authConfig = {
     authorized({ auth, request: { nextUrl } }) {
       const isLoggedIn = !!auth?.user;
       const isOnDashboard = nextUrl.pathname.startsWith("/dashboard");
-      if (isOnDashboard) {
-        if (isLoggedIn) return true;
-        return false; 
-        // Redirect unauthenticated users to login page
-      } else if (isLoggedIn) {
-        return Response.redirect(new URL("/dashboard", nextUrl));
+      const isOnAuth = nextUrl.pathname.indexOf("/auth") == 0;
+      const empty = nextUrl.pathname === "/dashboard";
+
+      if (isLoggedIn) {
+        if (empty || isOnAuth) {
+          return NextResponse.redirect(new URL("/dashboard/profile", nextUrl));
+        }
+        if (isOnDashboard) {
+          return true;
+        }
+      } else {
+        if (isOnAuth) {
+          return true;
+        }
+        return NextResponse.redirect(new URL("/", nextUrl));
       }
-      return true;
     },
   },
   providers: [],

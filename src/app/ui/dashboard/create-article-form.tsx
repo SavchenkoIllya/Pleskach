@@ -1,10 +1,13 @@
 "use client";
 import React, { useState, useRef, useEffect, ChangeEvent } from "react";
-import { Button } from "@/app/ui/button";
+import { DashboardButton } from "@/app/ui/dashboard-button";
 import MDEditor, { ContextStore } from "@uiw/react-md-editor";
 import rehypeSanitize from "rehype-sanitize";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { createArticle } from "@/app/lib/action";
+import { Input } from "../form/input";
+import { Label } from "../form/label";
+import Hint from "./hint";
 
 export type ArticleInputs = {
   title: string;
@@ -24,146 +27,45 @@ export const CreateArticleForm = () => {
     formState: { errors },
   } = useForm<ArticleInputs>();
   const [markdownSource, setMarkdownSource] = useState(DEFAULT_CONTENT);
-  const [showHint, setHint] = useState<boolean>(false);
-  const dropdownRef = useRef<HTMLDivElement>(null);
-  const dropDownButton = useRef<HTMLButtonElement>(null);
   const [isChecked, setChecked] = useState<boolean>(true);
 
   const handleCheck = () => setChecked(!isChecked);
 
   const submit: SubmitHandler<ArticleInputs> = async (data) => {
     try {
-      await createArticle(data);
-      reset({
-        title: "",
-        content: "",
-        tags: "",
-        published: true,
-      });
-      setMarkdownSource(DEFAULT_CONTENT);
-    } catch (error) {}
-  };
-
-  const handleOutsideClick = (e: MouseEvent) => {
-    const target = e.target as HTMLButtonElement;
-    if (target?.contains(dropdownRef.current)) {
-      setHint(false);
+      console.log(data);
+    } catch (error) {
+      console.log(errors);
     }
+
+    // try {
+    //   await createArticle(data);
+    //   reset({
+    //     title: "",
+    //     content: "",
+    //     tags: "",
+    //     published: true,
+    //   });
+    //   setMarkdownSource(DEFAULT_CONTENT);
+    // } catch (error) {}
   };
 
   useEffect(() => {
     setValue("content", markdownSource);
   }, [markdownSource]);
 
-  useEffect(() => {
-    document.addEventListener("click", handleOutsideClick);
-    return () => {
-      document.removeEventListener("click", handleOutsideClick);
-    };
-  }, []);
-
   return (
     <form className="flex flex-col gap-4" onSubmit={handleSubmit(submit)}>
-      {/* Title */}
-      <div className="flex flex-col flex-nowrap items-center justify-between w-[100%] h-min gap-4 self-start">
-        <label htmlFor="title" className="sr-only">
-          Title
-        </label>
-        <input
-          id="title"
-          className="outline-none w-[100%] border-solid border-2 border-transparent p-2 rounded-xl text-plane-text"
-          type="text"
-          placeholder="Title"
-          {...register("title", { required: true })}
-        />
-      </div>
-
-      {/* Popover */}
       <div>
-        <p className="flex items-center text-sm text-gray-500 dark:text-gray-400 self-end">
-          Show Hint
-          <button
-            className="z-[11]"
-            ref={dropDownButton}
-            data-popover-target="popover-description"
-            data-popover-placement="bottom-end"
-            type="button"
-            onClick={() => setHint(true)}
-            onMouseEnter={() => setHint(true)}
-          >
-            <svg
-              className="w-5 h-5 ms-2 text-gray-400 hover:text-gray-500"
-              aria-hidden="true"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                fill-rule="evenodd"
-                d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z"
-                clip-rule="evenodd"
-              ></path>
-            </svg>
-            <span className="sr-only">Show information</span>
-          </button>
-        </p>
-
-        {showHint && (
-          <>
-            <div
-              className="z-[9] absolute w-[100dvh] h-[100%] inset-0"
-              onMouseEnter={() => setHint(!showHint)}
-              onClick={() => setHint(false)}
-            ></div>
-
-            <div
-              ref={dropdownRef}
-              data-popover
-              id="popover-description"
-              role="tooltip"
-              className="absolute z-[11] inline-block text-sm text-gray-500 transition-opacity duration-300 bg-white border border-gray-200 rounded-lg shadow-sm w-72 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-400"
-            >
-              <div className="p-3 space-y-2">
-                <h3 className="font-semibold text-gray-900 dark:text-white">
-                  Some basic markup rules
-                </h3>
-                <p>
-                  Use # Your Heading – for headings Use ** Your text ** – for
-                  bold text <br />
-                  Use * Your text * – for italic text <br />
-                  Use - item 1 <br />- item 2 – for lists
-                </p>
-                <a
-                  href="https://www.markdownguide.org/basic-syntax/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center font-medium text-blue-600 dark:text-blue-500 dark:hover:text-blue-600 hover:text-blue-700 hover:underline"
-                >
-                  More rules here
-                  <svg
-                    className="w-2 h-2 ms-1.5 rtl:rotate-180"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 6 10"
-                  >
-                    <path
-                      stroke="currentColor"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="m1 9 4-4-4-4"
-                    />
-                  </svg>
-                </a>
-              </div>
-              <div data-popper-arrow></div>
-            </div>
-          </>
-        )}
+        <Label htmlFor="title" className="sr-only">
+          Title
+        </Label>
+        <Input id="title" placeholder="Title" {...register("title")} />
       </div>
+
+      <Hint />
+
       <div data-color-mode="light">
-        <input className="hidden" {...register("content")} />
         <MDEditor
           value={markdownSource}
           visibleDragbar={false}
@@ -181,21 +83,13 @@ export const CreateArticleForm = () => {
         />
       </div>
       <div className="flex flex-col flex-nowrap items-center justify-between w-[100%] h-min gap-4 self-start">
-        <label htmlFor="tags" className="sr-only">
+        <Label htmlFor="tags" className="sr-only">
           Tags
-        </label>
-        <input
-          id="tags"
-          className="outline-none w-[100%] border-solid border-2 border-transparent p-2 rounded-xl text-plane-text"
-          type="text"
-          placeholder="Tags"
-          {...register("tags")}
-        />
+        </Label>
+        <Input id="tags" type="text" placeholder="Tags" {...register("tags")} />
       </div>
       <div className="flex flex-nowrap items-center w-[100%] h-min gap-4 self-start">
-        <label htmlFor="publish" className="text-plane-text">
-          Publish immediately?
-        </label>
+        <Label htmlFor="publish">Publish immediately?</Label>
         <input
           id="publish"
           className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800"
@@ -205,13 +99,12 @@ export const CreateArticleForm = () => {
           {...register("published", { required: true })}
         />
       </div>
-      <Button
+      <DashboardButton
         type="submit"
-        style={{ background: "white", color: "#86B6F6" }}
-        className="self-center"
+        className="self-center rounded-lg transition-colors duration-300 transform px-6 py-2  text-blue-600 hover:bg-blue-500"
       >
         Send
-      </Button>
+      </DashboardButton>
     </form>
   );
 };

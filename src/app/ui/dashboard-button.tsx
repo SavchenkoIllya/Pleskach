@@ -1,8 +1,6 @@
 import { ReactElement } from "react";
 import { ChildrenProps } from "../types/definitions";
-import Link from "next/link";
 import clsx from "clsx";
-// import {Link} from "nex"
 
 interface IButtonProps {
   className?: string;
@@ -12,7 +10,7 @@ interface IButtonProps {
   [propsName: string]: any;
 }
 
-export const Button = ({
+export const DashboardButton = ({
   children,
   className = "",
   href,
@@ -23,7 +21,7 @@ export const Button = ({
     return (
       <a
         className={clsx(
-          "text-white bg-blue-700 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 ",
+          " w-fit text-white bg-sky-600 font-medium text-sm px-5 py-2.5 rounded-lg text-center me-2 mb-2 ",
           className
         )}
         href={href}
@@ -38,7 +36,7 @@ export const Button = ({
     return (
       <As
         className={clsx(
-          "text-white bg-blue-700 focus:outline-none  font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 ",
+          " w-fit text-white bg-sky-600 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 ",
           className
         )}
         href={href}

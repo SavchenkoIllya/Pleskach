@@ -3,7 +3,7 @@ import { auth, signIn } from "@/auth";
 import { sql } from "@vercel/postgres";
 import { revalidatePath } from "next/cache";
 import { unstable_noStore as noStore } from "next/cache";
-// import type { NextApiRequest, NextApiResponse } from "next";
+import { redirect } from "next/navigation";
 
 const getCurrentDate = () => {
   return new Date().toISOString().split("T")[0];
@@ -148,8 +148,6 @@ export async function createArticle(formData: any) {
     INSERT INTO articles (title, author_id, content, is_published, creation_date, tags_array)
     VALUES(${title}, ${userId}, ${content}, ${published}, ${date}, ${tags})
     `;
-
-    console.log("entity has been created");
   } catch (error) {
     return { message: "Cannot create new article" };
   }
@@ -181,26 +179,37 @@ export async function getArticleById(id: number) {
 }
 
 export async function updateArticle(id: number, formData: any) {
+  const notFormattedTags = formData.tags;
+  const tags = notFormattedTags.split(" ").filter(function (e: string) {
+    return e.replace(/(\r\n|\n|\r)/gm, "");
+  });
+  const { title, content, published } = formData;
+  const date = getCurrentDate();
+
   try {
-    const udpArticle = await sql`
+    await sql`
     UPDATE articles
-    SET title = "title",
-        email = 'новый_email@example.com'
+    SET title = ${title},
+        content = ${content},
+        is_published = ${published},
+        updating_date = ${date},
+        tags_array = ${tags}
     WHERE id=${id};
     `;
   } catch (error) {
     return { message: "Cannot update this article" };
   }
+  revalidatePath("/dashboard/articles");
 }
 
 export async function deleteArticle(id: number) {
   try {
-    const reqArticle = await sql`
+    await sql`
     DELETE FROM articles
     WHERE id=${id};
 `;
-    revalidatePath("/dashboard/articles");
   } catch (error) {
     return { message: "Cannot delete article by this id" };
   }
+  redirect("/dashboard/articles");
 }

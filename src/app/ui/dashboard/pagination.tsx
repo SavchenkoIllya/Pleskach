@@ -3,9 +3,6 @@ type PaginationProps = {
   callback?: () => void;
 };
 
-// interface ArrayConstructor {
-//   fill(arrayLike: any, mapFn?, thisArg?): Array<any>;
-// }
 
 export default function Pagination({ totalPages, callback }: PaginationProps) {
   const pagesToRender = new Array();

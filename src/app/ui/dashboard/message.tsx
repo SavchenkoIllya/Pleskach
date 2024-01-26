@@ -1,3 +1,4 @@
+import clsx from "clsx";
 import Dropdown from "./dropdown";
 
 type MessageProps = {
@@ -22,31 +23,36 @@ export const Message = ({
   return (
     <div
       key={id}
-      className={`flex flex-col w-full max-w-[500px] leading-1.5 p-4 border-gray-200 ${
-        !is_read ? "bg-sky-600" : "bg-stone-700"
-      } rounded-xl`}
+      className={clsx(
+        "flex flex-col w-full max-w-[500px] leading-1.5 p-4 border-gray-200 rounded-xl text-[#2A3256]",
+        !is_read ? "bg-sky-600" : "bg-[#F7F8FA]"
+      )}
     >
       <div className=" flex items-center justify-between space-x-2 rtl:space-x-reverse">
         <div className="flex align-baseline flex-col md:flex-row">
-          <span className="text-sm pr-4 font-semibold text-gray-900 dark:text-white">
-            {name}
-          </span>
-          <span className="text-sm font-semibold text-gray-900 dark:text-white">
+          <span className="text-sm pr-4 font-semibold ">{name}</span>
+          <a
+            href={`tel:${telephone}`}
+            className="text-sm font-semibold transition-all hover:italic"
+          >
             {telephone}
-          </span>
+          </a>
         </div>
         <Dropdown id={id} />
       </div>
 
-      <p className="text-sm font-normal py-2.5 text-gray-200">{problem}</p>
+      <p className="text-sm font-normal py-2.5 ">{problem}</p>
       <div className="flex justify-between ">
-        <span className="text-sm font-normal text-gray-200">
+        <span className="text-sm font-normal text-[#7E8296]">
           {is_read ? "Read" : "New"}
         </span>
-        <span className="text-sm font-normal text-gray-500 dark:text-gray-400">
+        <span className="text-sm font-normal text-[#7E8296]">
           {formattedDate}
         </span>
       </div>
     </div>
   );
 };
+
+// #F7F8FA
+// #2A3256

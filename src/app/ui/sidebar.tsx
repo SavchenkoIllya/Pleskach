@@ -1,110 +1,185 @@
 import { auth } from "@/auth";
 import Logout from "./logout";
-import Link from "next/link";
+import clsx from "clsx";
+import { PROJECT_NAME } from "../lib/projectConstants";
+import { Navigation } from "./navigation";
 
-export default async function Sidebar() {
-  const session = await auth();
+const LOGO_COLOR = "#0284c7";
 
+export default function Sidebar() {
   return (
     <>
-      <button
-        data-drawer-target="default-sidebar"
-        data-drawer-toggle="default-sidebar"
-        aria-controls="default-sidebar"
-        type="button"
-        className="inline-flex items-center p-2 mt-2 ms-3 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
-      >
-        <span className="sr-only">Open sidebar</span>
-        <svg
-          className="w-6 h-6"
-          aria-hidden="true"
-          fill="currentColor"
-          viewBox="0 0 20 20"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            clip-rule="evenodd"
-            fill-rule="evenodd"
-            d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z"
-          ></path>
-        </svg>
-      </button>
+      <SidebarWrapper>
+        <LogoElement />
 
-      <aside
-        id="sidebar"
-        className="fixed top-0 left-0 z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0"
-        aria-label="Sidebar"
-      >
-        <div className="h-full px-3 py-4 overflow-y-auto bg-gray-50 dark:bg-gray-800">
-          <ul className="space-y-2 flex flex-col justify-between h-[100%]">
-            <div>
-              <li>
-                <p className="p-2">{!!session && session.user?.name}</p>
-              </li>
-              <li>
-                <Link
-                  href="/dashboard/profile"
-                  className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+        <div className="flex flex-col justify-between flex-1 mt-6">
+          <Navigation />
+
+          <div>
+            <ShowUser />
+
+            <nav className="mt-4 -mx-3 space-y-3 ">
+              <button className="flex items-center justify-between w-full px-3 py-2 text-xs font-medium text-gray-600 transition-colors duration-300 transform rounded-lg dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-gray-200 hover:text-gray-700">
+                <div className="flex items-center gap-x-2 ">
+                  <span className="w-2 h-2 bg-pink-500 rounded-full"></span>
+                  <span>Components</span>
+                </div>
+
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.5"
+                  stroke="currentColor"
+                  className="w-4 h-4 rtl:rotate-180"
                 >
-                  <svg
-                    className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="currentColor"
-                    viewBox="0 0 20 18"
-                  >
-                    <path d="M14 2a3.963 3.963 0 0 0-1.4.267 6.439 6.439 0 0 1-1.331 6.638A4 4 0 1 0 14 2Zm1 9h-1.264A6.957 6.957 0 0 1 15 15v2a2.97 2.97 0 0 1-.184 1H19a1 1 0 0 0 1-1v-1a5.006 5.006 0 0 0-5-5ZM6.5 9a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9ZM8 10H5a5.006 5.006 0 0 0-5 5v2a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-2a5.006 5.006 0 0 0-5-5Z" />
-                  </svg>
-                  <span className="flex-1 ms-3 whitespace-nowrap">
-                    User Preferences
-                  </span>
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href={`/dashboard/posts/${1}`}
-                  className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M8.25 4.5l7.5 7.5-7.5 7.5"
+                  />
+                </svg>
+              </button>
+
+              <button className="flex items-center justify-between w-full px-3 py-2 text-xs font-medium text-gray-700 transition-colors duration-300 transform bg-gray-100 rounded-lg dark:bg-gray-800 dark:text-gray-200">
+                <div className="flex items-center gap-x-2 ">
+                  <span className="w-2 h-2 rounded-full bg-slate-500"></span>
+                  <span>Blog navigation</span>
+                </div>
+
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.5"
+                  stroke="currentColor"
+                  className="w-4 h-4 rtl:rotate-180"
                 >
-                  <svg
-                    className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
-                    <path d="m17.418 3.623-.018-.008a6.713 6.713 0 0 0-2.4-.569V2h1a1 1 0 1 0 0-2h-2a1 1 0 0 0-1 1v2H9.89A6.977 6.977 0 0 1 12 8v5h-2V8A5 5 0 1 0 0 8v6a1 1 0 0 0 1 1h8v4a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1v-4h6a1 1 0 0 0 1-1V8a5 5 0 0 0-2.582-4.377ZM6 12H4a1 1 0 0 1 0-2h2a1 1 0 0 1 0 2Z" />
-                  </svg>
-                  <span className="flex-1 ms-3 whitespace-nowrap">Inbox</span>
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href={"/dashboard/articles"}
-                  className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M8.25 4.5l7.5 7.5-7.5 7.5"
+                  />
+                </svg>
+              </button>
+
+              <button className="flex items-center justify-between w-full px-3 py-2 text-xs font-medium text-gray-600 transition-colors duration-300 transform rounded-lg dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-gray-200 hover:text-gray-700">
+                <div className="flex items-center gap-x-2 ">
+                  <span className="w-2 h-2 bg-indigo-500 rounded-full"></span>
+                  <span>Design System</span>
+                </div>
+
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.5"
+                  stroke="currentColor"
+                  className="w-4 h-4 rtl:rotate-180"
                 >
-                  <svg
-                    className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
-                    <path d="M5 5V.13a2.96 2.96 0 0 0-1.293.749L.879 3.707A2.96 2.96 0 0 0 .13 5H5Z" />
-                    <path d="M6.737 11.061a2.961 2.961 0 0 1 .81-1.515l6.117-6.116A4.839 4.839 0 0 1 16 2.141V2a1.97 1.97 0 0 0-1.933-2H7v5a2 2 0 0 1-2 2H0v11a1.969 1.969 0 0 0 1.933 2h12.134A1.97 1.97 0 0 0 16 18v-3.093l-1.546 1.546c-.413.413-.94.695-1.513.81l-3.4.679a2.947 2.947 0 0 1-1.85-.227 2.96 2.96 0 0 1-1.635-3.257l.681-3.397Z" />
-                    <path d="M8.961 16a.93.93 0 0 0 .189-.019l3.4-.679a.961.961 0 0 0 .49-.263l6.118-6.117a2.884 2.884 0 0 0-4.079-4.078l-6.117 6.117a.96.96 0 0 0-.263.491l-.679 3.4A.961.961 0 0 0 8.961 16Zm7.477-9.8a.958.958 0 0 1 .68-.281.961.961 0 0 1 .682 1.644l-.315.315-1.36-1.36.313-.318Zm-5.911 5.911 4.236-4.236 1.359 1.359-4.236 4.237-1.7.339.341-1.699Z" />
-                  </svg>
-                  <span className="flex-1 ms-3 whitespace-nowrap">
-                    Articles
-                  </span>
-                </Link>
-              </li>
-            </div>
-            <li>
-              <Logout />
-            </li>
-          </ul>
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M8.25 4.5l7.5 7.5-7.5 7.5"
+                  />
+                </svg>
+              </button>
+
+              <button className="flex items-center justify-between w-full px-3 py-2 text-xs font-medium text-gray-600 transition-colors duration-300 transform rounded-lg dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-gray-200 hover:text-gray-700">
+                <div className="flex items-center gap-x-2 ">
+                  <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
+                  <span>Wishlist components</span>
+                </div>
+
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.5"
+                  stroke="currentColor"
+                  className="w-4 h-4 rtl:rotate-180"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M8.25 4.5l7.5 7.5-7.5 7.5"
+                  />
+                </svg>
+              </button>
+
+              <button className="flex items-center justify-between w-full px-3 py-2 text-xs font-medium text-gray-600 transition-colors duration-300 transform rounded-lg dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-gray-200 hover:text-gray-700">
+                <div className="flex items-center gap-x-2 ">
+                  <span className="w-2 h-2 bg-yellow-500 rounded-full"></span>
+                  <span>Components</span>
+                </div>
+
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.5"
+                  stroke="currentColor"
+                  className="w-4 h-4 rtl:rotate-180"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M8.25 4.5l7.5 7.5-7.5 7.5"
+                  />
+                </svg>
+              </button>
+            </nav>
+          </div>
         </div>
-      </aside>
+      </SidebarWrapper>
     </>
   );
 }
+
+export const ShowUser = async () => {
+  const session = await auth();
+  return (
+    <div className="flex items-center justify-between">
+      <h2 className="text-base font-semibold text-gray-800">
+        {!!session && session.user?.name}
+      </h2>
+    </div>
+  );
+};
+
+export const SidebarWrapper = ({ children }: any) => {
+  return (
+    <aside className="flex flex-col w-72 h-screen px-5 py-8 overflow-y-auto bg-[#F0F1FF] border-r rtl:border-r-0 rtl:border-l ">
+      {children}
+    </aside>
+  );
+};
+
+export const LogoElement = ({ children, className }: any) => {
+  return (
+    <a
+      className={clsx(
+        "flex items-center text-gray-600 transition-colors duration-300 transform rounded-lg ",
+        className
+      )}
+      href="#"
+    >
+      <div className="flex justify-center items-center gap-2">
+        <svg
+          data-name="015_HEALTH"
+          id="_015_HEALTH"
+          width={"50px"}
+          viewBox="0 0 24 24"
+          height={"50px"}
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            fill={LOGO_COLOR}
+            d="M12,21.373c-2.15527,0-7.46484-4.20117-9.45312-8.98926a.9999.9999,0,0,1,.92383-1.3833L7.46484,11,9.168,8.44531a.9996.9996,0,0,1,1.78027.23828l1.35352,4.06055.86621-1.29883A1.00027,1.00027,0,0,1,14,11h3a1,1,0,0,1,0,2H14.53516L12.832,15.55469a.9996.9996,0,0,1-1.78027-.23828L9.69824,11.25586,8.832,12.55469A1.00027,1.00027,0,0,1,8,13l-2.918.00049c2.10742,3.645,5.9873,6.32861,6.92188,6.37256.74023-.03516,3.916-2.07715,6.13379-5.16553,1.3252-1.8457,2.73047-4.65576,1.90039-7.55957a3.66738,3.66738,0,0,0-3.34863-2.64307,3.80662,3.80662,0,0,0-3.76074,2.73975,1.00046,1.00046,0,0,1-1.85742,0A3.81422,3.81422,0,0,0,7.31055,4.00488,3.66738,3.66738,0,0,0,3.96191,6.64795a6.5335,6.5335,0,0,0-.23926,1.41016.99971.99971,0,1,1-1.99609-.11523,8.51963,8.51963,0,0,1,.31152-1.84473A5.66991,5.66991,0,0,1,7.209,2.00732,5.53309,5.53309,0,0,1,12,4.3208a5.51264,5.51264,0,0,1,4.791-2.31348,5.66991,5.66991,0,0,1,5.1709,4.09082c1.08984,3.81738-.73242,7.33789-2.45312,9.61963C17.27637,18.67725,13.69727,21.373,12,21.373Z"
+          />
+        </svg>
+        <h1 className="font-[800] text-md text-gray-700">{PROJECT_NAME}</h1>
+      </div>
+    </a>
+  );
+};

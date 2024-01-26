@@ -10,7 +10,7 @@ export default async function EditArticle(req: {
 
   return (
     <div className="p-4 flex flex-col justify-between items-center h-[100%]">
-      <EditArticleForm data={article} />
+      <EditArticleForm data={article}/>
     </div>
   );
 }

@@ -24,7 +24,7 @@ Application tree:
 
 - Landing (“/“) – some hero sections with semantic structure. Also form for applying health complaints in online format.
   - Articles (“/[articlelId]“) – posts that can be written in admin panel. Using right semantic structure it can help customer to attract more patients from searching engines.
-- Login (“/login”)
+- Login (“/auth”)
 - Dashboard (“/dashboard”)
   - User (“../profiles”)
     - Edit user (“../[userId]/edit”)

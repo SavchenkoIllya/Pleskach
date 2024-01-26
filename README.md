@@ -1,36 +1,38 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+### Summary:
 
-## Getting Started
+Millions of doctors around the world spend hundreds hours and thousands dollars doing internal paper work every day. What if you can optimise this routine?
 
-First, run the development server:
+This project have been created as test case for learning in „field“ conditions. At the same time this project is actual commercial project that I’m developing right now.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+It have several difficulties that I have to deal in the nearest future. As privacy and data security. On another hand because of my medical experience I know lot of things that I would like to implement in next iterations so my To-do list is always full.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Stack:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+**Next.js** – avoid me to write tones of boilerplate code. But it’s still good idea to split front-, backend and DB parts into different services to create more microservice-like architecture that would be easier to expand.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+**PostgreSQL** – it’s provided by Vercel as a “easy to start” pare if use Vercel’s services. In my case I need to ship it as fast as I can and then after couple of tests I can decide which way should I use. Anyway if any kind of medical DB exists, I almost sure that it must be SQL DB so at least we are talking about same BD paradigm, that can be helpful during any kind of migrations.
 
-## Learn More
+**Tailwind CSS** – also easy and fast way to style your application, you don’t repeat yourself. Also for creating dashboard part that was awesome that I could use 3-rd part component libraries and adopt them to my cases. And it’s also compatible with my animation library.
 
-To learn more about Next.js, take a look at the following resources:
+**Framer Motion** – one of the best free libraries for animations in React, in my opinion. Easy to start and use. Very developer-friendly. Already had some experience so I knew well how to implement it.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+**Typescript** – for me was very important to bring entities from server side on frontend and back as save as possible so I wasn’t even though about using typescript or pure JS in this case. Also Security, Utils, and I would call it advanced linter’s features.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+### Parts of application:
 
-## Deploy on Vercel
+Application tree:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- Landing (“/“) – some hero sections with semantic structure. Also form for applying health complaints in online format.
+  - Articles (“/[articlelId]“) – posts that can be written in admin panel. Using right semantic structure it can help customer to attract more patients from searching engines.
+- Login (“/login”)
+- Dashboard (“/dashboard”)
+  - User (“../profiles”)
+    - Edit user (“../[userId]/edit”)
+  - Articles (“../articles”)
+    - Create new (“../create”)
+    - Edit(“../[articleId]/edit”)
+  - Posts (“../posts/[paginationPageNum]”) – paginated view of all patients complains.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+### Future plans:
+
+I see future development of this project in creating scheduling system inside dashboard and strong secured system of patients administration. This tool must be assistant that can be as helpful as at least one extra employee from your office.

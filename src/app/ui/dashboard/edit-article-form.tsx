@@ -7,6 +7,7 @@ import { useForm, SubmitHandler } from "react-hook-form";
 // import { createArticle } from "@/app/lib/action";
 import { ArticleInputs } from "./create-article-form";
 import { Article } from "@/app/page";
+import { updateArticle, deleteArticle } from "@/app/lib/action";
 
 export const EditArticleForm = (props: { data: Article }) => {
   const article = props.data;
@@ -14,7 +15,6 @@ export const EditArticleForm = (props: { data: Article }) => {
     register,
     handleSubmit,
     setValue,
-    reset,
     formState: { errors },
   } = useForm<ArticleInputs>();
   const [markdownSource, setMarkdownSource] = useState(article.content);
@@ -27,7 +27,18 @@ export const EditArticleForm = (props: { data: Article }) => {
 
   const submit: SubmitHandler<ArticleInputs> = async (data) => {
     try {
-    } catch (error) {}
+      await updateArticle(article.id, data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleDelete = async () => {
+    try {
+      await deleteArticle(article.id);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const handleOutsideClick = (e: MouseEvent) => {
@@ -200,9 +211,11 @@ export const EditArticleForm = (props: { data: Article }) => {
           style={{ background: "white", color: "#86B6F6" }}
           className="self-center"
         >
-          Send
+          Update
         </Button>
-        <Button style={{ background: "#dc2626" }}>Delete article</Button>
+        <Button onClick={handleDelete} style={{ background: "#dc2626" }}>
+          Delete article
+        </Button>
       </div>
     </form>
   );

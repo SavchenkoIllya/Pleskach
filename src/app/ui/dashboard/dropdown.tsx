@@ -10,7 +10,6 @@ export default function Dropdown({ id }: DropdownProps) {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const itemRef = useRef<HTMLDivElement>(null);
-  
 
   const handleOutsideClick = (e: MouseEvent) => {
     const target = e.target as HTMLButtonElement;
@@ -41,7 +40,7 @@ export default function Dropdown({ id }: DropdownProps) {
   return (
     <div ref={dropdownRef} className="flex flex-col relative">
       <button
-        className="flex flex-col justify-between items-center relative"
+        className="flex flex-col justify-between items-center"
         onClick={() => {
           setIsOpen((prev) => !prev);
         }}
@@ -49,7 +48,7 @@ export default function Dropdown({ id }: DropdownProps) {
         <svg
           height={25}
           width={25}
-          fill="white"
+          fill="#2A3256"
           viewBox="0 0 256 256"
           xmlns="http://www.w3.org/2000/svg"
         >
@@ -61,33 +60,35 @@ export default function Dropdown({ id }: DropdownProps) {
       </button>
 
       {isOpen && (
-        <div
-          ref={itemRef}
-          id="dropdownDots"
-          className="z-10 bg-white absolute right-0 divide-gray-100 rounded-lg shadow w-40 dark:bg-gray-700 dark:divide-gray-600"
-        >
-          <ul
-            className="text-sm text-gray-700 rounded-lg dark:text-gray-200"
-            aria-labelledby="dropdownMenuIconButton"
+        <>
+          <div
+            ref={itemRef}
+            id="dropdownDots"
+            className="z-10 bg-white absolute right-0 divide-gray-100 rounded-lg shadow w-40 before:z-[-1]"
           >
-            <li>
-              <button
-                onClick={handleMark}
-                className="block text-left w-[100%] px-4 py-2 hover:bg-gray-100 rounded-t-lg dark:hover:bg-gray-600 dark:hover:text-white"
-              >
-                Mark as read
-              </button>
-            </li>
-            <li>
-              <button
-                onClick={handleDelete}
-                className="block px-4 text-left w-[100%] py-2 hover:bg-rose-600 rounded-b-lg bg-rose-700 dark:hover:text-white"
-              >
-                Delete
-              </button>
-            </li>
-          </ul>
-        </div>
+            <ul
+              className="text-sm text-gray-700 rounded-lg dark:text-gray-200"
+              aria-labelledby="dropdownMenuIconButton"
+            >
+              <li>
+                <button
+                  onClick={handleMark}
+                  className="block text-left w-[100%] px-4 py-2 hover:bg-gray-100 rounded-t-lg dark:hover:bg-gray-600 dark:hover:text-white"
+                >
+                  Mark as read
+                </button>
+              </li>
+              <li>
+                <button
+                  onClick={handleDelete}
+                  className="block px-4 text-left w-[100%] py-2 hover:bg-rose-600 rounded-b-lg bg-rose-700 dark:hover:text-white"
+                >
+                  Delete
+                </button>
+              </li>
+            </ul>
+          </div>
+        </>
       )}
     </div>
   );

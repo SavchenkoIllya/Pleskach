@@ -1,15 +1,9 @@
 import clsx from "clsx";
 import Dropdown from "./dropdown";
+import { IPosts } from "@/app/lib/definitions";
+import { IComponentProps } from "../types/types";
 
-type MessageProps = {
-  key?: any;
-  id: number;
-  name: string;
-  telephone: string;
-  problem: string;
-  is_read: false;
-  date: Date;
-};
+interface IMessageProps extends IPosts, IComponentProps {}
 
 export const Message = ({
   id,
@@ -18,14 +12,14 @@ export const Message = ({
   problem,
   date,
   is_read,
-}: MessageProps) => {
+}: IMessageProps) => {
   const formattedDate = new Date(date).toISOString().split("T")[0];
   return (
     <div
       key={id}
       className={clsx(
         "flex flex-col w-full max-w-[500px] leading-1.5 p-4 border-gray-200 rounded-xl text-[#2A3256]",
-        !is_read ? "bg-sky-600" : "bg-[#F7F8FA]"
+        !is_read ? "bg-sky-600" : "bg-message-read"
       )}
     >
       <div className=" flex items-center justify-between space-x-2 rtl:space-x-reverse">

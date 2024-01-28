@@ -1,49 +1,55 @@
 "use client";
-import { deletePost, markPostAsRead } from "@/app/lib/action";
 import { useState, useEffect, useRef } from "react";
+import { deletePost, markPostAsRead } from "@/app/lib/action";
+import clsx from "clsx";
 
 type DropdownProps = {
   id: number;
 };
 
 export default function Dropdown({ id }: DropdownProps) {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpened, setOpened] = useState<boolean>(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
-  const itemRef = useRef<HTMLDivElement>(null);
-
-  const handleOutsideClick = (e: MouseEvent) => {
-    const target = e.target as HTMLButtonElement;
-    if (target?.contains(dropdownRef.current)) {
-      setIsOpen(false);
-    }
-  };
 
   const handleMark = (e: any) => {
     e.preventDefault();
     markPostAsRead(id);
-    setIsOpen(false);
+    setOpened((prev) => !prev);
   };
 
   const handleDelete = (e: any) => {
     e.preventDefault();
     deletePost(id);
-    setIsOpen(false);
+    setOpened((prev) => !prev);
   };
 
   useEffect(() => {
-    document.addEventListener("click", handleOutsideClick);
+    const handleOutsideClick = (e: MouseEvent) => {
+      if (!dropdownRef.current?.contains(e.target as Node)) {
+        setOpened(false);
+      }
+    };
+
+    if (isOpened) {
+      document.addEventListener("click", handleOutsideClick);
+    } else {
+      document.removeEventListener("click", handleOutsideClick);
+    }
+
     return () => {
       document.removeEventListener("click", handleOutsideClick);
     };
-  }, []);
+  }, [isOpened]);
+
+  const handleClick = () => {
+    setOpened((prev) => !prev);
+  };
 
   return (
     <div ref={dropdownRef} className="flex flex-col relative">
       <button
         className="flex flex-col justify-between items-center"
-        onClick={() => {
-          setIsOpen((prev) => !prev);
-        }}
+        onClick={handleClick}
       >
         <svg
           height={25}
@@ -59,37 +65,40 @@ export default function Dropdown({ id }: DropdownProps) {
         </svg>
       </button>
 
-      {isOpen && (
-        <>
-          <div
-            ref={itemRef}
-            id="dropdownDots"
-            className="z-10 bg-white absolute right-0 divide-gray-100 rounded-lg shadow w-40 before:z-[-1]"
+      {/* {isOpened && ( */}
+      <>
+        <div
+          ref={dropdownRef}
+          id="dropdownDots"
+          className={clsx(
+            "z-10 bg-white transition absolute right-0 divide-gray-100 rounded-lg shadow w-40",
+            isOpened ? "opacity-100 mt-0" : "opacity-0 -mt-8"
+          )}
+        >
+          <ul
+            className="text-sm text-gray-700 rounded-lg dark:text-gray-200"
+            aria-labelledby="dropdownMenuIconButton"
           >
-            <ul
-              className="text-sm text-gray-700 rounded-lg dark:text-gray-200"
-              aria-labelledby="dropdownMenuIconButton"
-            >
-              <li>
-                <button
-                  onClick={handleMark}
-                  className="block text-left w-[100%] px-4 py-2 hover:bg-gray-100 rounded-t-lg dark:hover:bg-gray-600 dark:hover:text-white"
-                >
-                  Mark as read
-                </button>
-              </li>
-              <li>
-                <button
-                  onClick={handleDelete}
-                  className="block px-4 text-left w-[100%] py-2 hover:bg-rose-600 rounded-b-lg bg-rose-700 dark:hover:text-white"
-                >
-                  Delete
-                </button>
-              </li>
-            </ul>
-          </div>
-        </>
-      )}
+            <li>
+              <button
+                onClick={handleMark}
+                className="block text-left w-[100%] px-4 py-2 hover:bg-gray-100 rounded-t-lg"
+              >
+                Mark as read
+              </button>
+            </li>
+            <li>
+              <button
+                onClick={handleDelete}
+                className="block px-4 text-white text-left w-[100%] py-2 hover:bg-rose-600 rounded-b-lg bg-rose-700 "
+              >
+                Delete
+              </button>
+            </li>
+          </ul>
+        </div>
+      </>
+      {/* )} */}
     </div>
   );
 }

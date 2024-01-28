@@ -1,9 +1,10 @@
 "use server";
-import { auth, signIn } from "@/auth";
+import { auth, signIn, signOut } from "@/auth";
 import { sql } from "@vercel/postgres";
 import { revalidatePath } from "next/cache";
 import { unstable_noStore as noStore } from "next/cache";
 import { redirect } from "next/navigation";
+import { IUser } from "./definitions";
 
 const getCurrentDate = () => {
   return new Date().toISOString().split("T")[0];
@@ -18,6 +19,23 @@ export async function authenticate(formData: any) {
     });
   } catch (error) {
     return { message: "Cannot authenticate this user" };
+  }
+}
+
+export async function getMe() {
+  try {
+    const user = await auth();
+    return user;
+  } catch (error) {
+    return { message: error?.toString() };
+  }
+}
+
+export async function logout() {
+  try {
+    await signOut();
+  } catch {
+    return { message: "Cannot logout" };
   }
 }
 

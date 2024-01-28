@@ -6,9 +6,6 @@ export default function Article() {
   return (
     <section className="min-h-[100dvh]">
       <Container className="my-36">
-        <Button href="/" as={Link}>
-          Назад
-        </Button>
       </Container>
     </section>
   );

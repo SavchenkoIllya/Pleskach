@@ -1,16 +1,10 @@
-import { ChildrenProps } from "../types/definitions";
-
-type IContainerProps = {
-  children: ChildrenProps;
-  className?: string;
-  [propsName: string]: any;
-};
+import { IComponentProps } from "./types/types";
 
 export const Container = ({
   children,
   className = "",
   ...props
-}: IContainerProps) => {
+}: IComponentProps) => {
   return (
     <div className={"max-w-[1080px] m-auto" + " " + className} {...props}>
       {children}

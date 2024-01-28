@@ -1,11 +1,5 @@
-import { ReactElement } from "react";
-import { ChildrenProps } from "../types/definitions";
+import { IComponentProps } from "./types/types";
 
-interface IHeadingProps {
-  className?: string;
-  children: ChildrenProps;
-}
-
-export const Heading = ({ className = "", children }: IHeadingProps) => {
+export const Heading = ({ className = "", children }: IComponentProps) => {
   return <h1 className={"font-bold text-2xl" + " " + className}>{children}</h1>;
 };

@@ -4,22 +4,23 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { authenticate } from "../lib/action";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { IUser } from "../lib/definitions";
 
-type Inputs = {
-  email: string;
+interface ILoginInputs extends Partial<IUser> {
   password: string;
-};
+}
 
 export const LoginForm = () => {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<Inputs>();
+  } = useForm<ILoginInputs>();
+
   const [fetchError, setError] = useState<string>("");
   const router = useRouter();
 
-  const onSubmit: SubmitHandler<Inputs> = async (data) => {
+  const onSubmit: SubmitHandler<ILoginInputs> = async (data) => {
     try {
       await authenticate(data);
       router.replace("/dashboard/profile");

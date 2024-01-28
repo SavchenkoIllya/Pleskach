@@ -3,11 +3,10 @@ import Image from "next/image";
 import WhatsAppIcon from "../assets/WhatsApp.png";
 import TelegramIcon from "../assets/Telegram_logo.svg.webp";
 import { Button } from "./button";
+import { IComponentProps } from "./types/types";
 
-interface IHeaderProps {
+interface IHeaderProps extends IComponentProps {
   telephone: string;
-  className?: string;
-  [propsName: string]: any;
 }
 
 export const Header = ({

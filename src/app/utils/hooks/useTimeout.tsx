@@ -1,24 +1,37 @@
-import { useCallback, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
+import { useIsomorphicLayoutEffect } from "./useIsomorphicLayoutEffect";
 
-export default function useTimeout(callback: () => void, delay: number) {
-  const callbackRef = useRef(callback);
-  const timeoutRef = useRef<any>();
-  useEffect(() => {
-    callbackRef.current = callback;
+/**
+ * Custom hook for handling timeouts in React components.
+ * @param {() => void} callback - The function to be executed when the timeout elapses.
+ * @param {number | null} delay - The duration (in milliseconds) for the timeout. Set to `null` to clear the timeout.
+ * @returns {void} This hook does not return anything.
+ * @see [Documentation](https://usehooks-ts.com/react-hook/use-timeout)
+ * @see [MDN setTimeout](https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/setTimeout)
+ * @example
+ * // Usage of useTimeout hook
+ * useTimeout(() => {
+ *   // Code to be executed after the specified delay
+ * }, 1000); // Set a timeout of 1000 milliseconds (1 second)
+ */
+export function useTimeout(callback: () => void, delay: number | null) {
+  const savedCallback = useRef(callback);
+
+  // Remember the latest callback if it changes.
+  useIsomorphicLayoutEffect(() => {
+    savedCallback.current = callback;
   }, [callback]);
-  const set = useCallback(() => {
-    timeoutRef.current = setTimeout(() => callbackRef.current(), delay);
-  }, [delay]);
-  const clear = useCallback(() => {
-    timeoutRef.current && clearTimeout(timeoutRef.current);
-  }, []);
+
+  // Set up the timeout.
   useEffect(() => {
-    set();
-    return clear;
-  }, [delay, set, clear]);
-  const reset = useCallback(() => {
-    clear();
-    set();
-  }, [clear, set]);
-  return { reset, clear };
+    // Don't schedule if no delay is specified.
+    // Note: 0 is a valid value for delay.
+    if (!delay && delay !== 0) {
+      return;
+    }
+
+    const id = setTimeout(() => savedCallback.current(), delay);
+
+    return () => clearTimeout(id);
+  }, [delay]);
 }

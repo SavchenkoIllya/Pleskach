@@ -1,18 +1,18 @@
 "use client";
-import Image from "next/image";
+// import Image from "next/image";
 import Link from "next/link";
 import { Heading } from "./heading";
-import { Text } from "./text";
+// import { Text } from "./text";
 import defaultPicture from "@/app/assets/Medical_Science_Kolleg.jpg";
 import { Remark } from "react-remark";
+import { IComponentProps } from "./types/types";
 
-interface ICard {
+interface ICard extends IComponentProps {
   id: number;
   title: string;
   imgSrc: string;
   link: any;
   content: string;
-  [propsName: string]: any;
 }
 
 export const Card = ({ title, imgSrc, link, content, id, ...props }: ICard) => {

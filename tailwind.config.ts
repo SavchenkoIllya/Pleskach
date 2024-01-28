@@ -18,6 +18,7 @@ const config: Config = {
         "plane-text": "#616161",
         accent: "#86B6F6",
         background: "#EEF5FF",
+        "message-read": "#F7F8FA",
       },
     },
   },

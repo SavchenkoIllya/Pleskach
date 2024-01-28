@@ -21,7 +21,7 @@ const Hint = () => {
 
   return (
     <div>
-      <p className="flex items-center text-sm text-gray-500 dark:text-gray-400 self-end">
+      <p className="descriptor flex items-center self-end">
         Show Hint
         <button
           className="z-[11]"
@@ -33,7 +33,7 @@ const Hint = () => {
           onMouseEnter={() => setHint(true)}
         >
           <svg
-            className="w-5 h-5 ms-2 text-gray-400 hover:text-gray-500"
+            className="ms-2 h-5 w-5 text-gray-400 hover:text-gray-500"
             aria-hidden="true"
             fill="currentColor"
             viewBox="0 0 20 20"
@@ -52,7 +52,7 @@ const Hint = () => {
       {showHint && (
         <>
           <div
-            className="z-[9] absolute w-[100%] h-[100dvh] inset-0"
+            className="absolute inset-0 z-[9] h-[100dvh] w-[100%]"
             onMouseEnter={() => setHint(!showHint)}
             onClick={() => setHint(false)}
           ></div>
@@ -62,13 +62,11 @@ const Hint = () => {
             data-popover
             id="popover-description"
             role="tooltip"
-            className="absolute z-[11] inline-block text-sm text-gray-500 transition-opacity duration-300 bg-white border border-gray-200 rounded-lg shadow-sm w-72 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-400"
+            className="modal-bg absolute z-[11] inline-block w-72 rounded-lg "
           >
-            <div className="p-3 space-y-2">
-              <h3 className="font-semibold text-gray-900 dark:text-white">
-                Some basic markup rules
-              </h3>
-              <p>
+            <div className="space-y-2 p-3">
+              <h3 className="h2 text-sm">Some basic markup rules</h3>
+              <p className="paragraph">
                 Use # Your Heading – for headings Use ** Your text ** – for bold
                 text <br />
                 Use * Your text * – for italic text <br />
@@ -78,11 +76,11 @@ const Hint = () => {
                 href="https://www.markdownguide.org/basic-syntax/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center font-medium text-blue-600 dark:text-blue-500 dark:hover:text-blue-600 hover:text-blue-700 hover:underline"
+                className="flex items-center font-medium text-blue-600 hover:text-blue-700 hover:underline dark:text-blue-500 dark:hover:text-blue-600"
               >
                 More rules here
                 <svg
-                  className="w-2 h-2 ms-1.5 rtl:rotate-180"
+                  className="ms-1.5 h-2 w-2 rtl:rotate-180"
                   aria-hidden="true"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"

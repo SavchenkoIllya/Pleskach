@@ -1,19 +1,15 @@
 import { getPaginatedPosts } from "@/app/lib/action";
-import { Posts } from "@/app/lib/definitions";
+import { IPosts } from "@/app/lib/definitions";
 import { Message } from "@/app/ui/dashboard/message";
 import CustomPagination from "@/app/ui/dashboard/pagination-core";
 import { Suspense } from "react";
 import clsx from "clsx";
 import { PostSkeleton } from "@/app/ui/suspense/posts-suspence";
-type PaginatedPosts = {
-  totalPages: number;
-  data: Posts[];
-};
 
 export default async function Posts(req: { params: { pageNumber: number } }) {
   const page = Number(req.params.pageNumber) || 1;
   const paginatedPosts = await getPaginatedPosts(page);
-  const posts = paginatedPosts.data as Posts[];
+  const posts = paginatedPosts.data as IPosts[];
   const totalContent = paginatedPosts.totalContent;
   const contentOnPage = paginatedPosts.contentOnPage;
 
@@ -22,10 +18,10 @@ export default async function Posts(req: { params: { pageNumber: number } }) {
   };
 
   return (
-    <div className="p-4 flex flex-col justify-between items-center h-[100%]">
+    <div className="p-4 flex flex-col justify-between items-center min-h-[100dvh]">
       <div className="flex justify-center items-center gap-4 flex-col">
         <Suspense fallback={<PostSkeleton />}>
-          {posts.map((el: any) => {
+          {posts?.map((el: any) => {
             return (
               <Message
                 key={el.id}
@@ -38,14 +34,19 @@ export default async function Posts(req: { params: { pageNumber: number } }) {
               />
             );
           })}
+          {!posts && <p className="">1233</p>}
         </Suspense>
       </div>
-      <CustomPagination
-        className="my-8"
-        totalCount={totalContent}
-        pageSize={contentOnPage}
-        currentPage={page}
-      />
+      <Suspense>
+        {posts && (
+          <CustomPagination
+            className="my-8"
+            totalCount={totalContent}
+            pageSize={contentOnPage}
+            currentPage={page}
+          />
+        )}
+      </Suspense>
     </div>
   );
 }

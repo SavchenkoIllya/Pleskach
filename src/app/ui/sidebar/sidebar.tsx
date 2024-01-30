@@ -7,38 +7,25 @@ import { SidebarWrapper } from "./sidebar-wrapper";
 import { Session } from "next-auth";
 import { IComponentProps } from "../types/types";
 import { useEffect, useState } from "react";
-import { getMe } from "@/app/lib/action";
+import { getSession } from "@/app/lib/action";
 
 interface ISidebarProps extends IComponentProps {
   session?: Session;
 }
 
-type UserReq =
-  | Session
-  | {
-      message: string | undefined;
-    }
-  | null;
-
 export default function Sidebar({ session }: ISidebarProps) {
-  const [user, setUser] = useState<UserReq>();
-
+  const [user, setUser] = useState<Session>();
   useEffect(() => {
     const handleSession = async () => {
       try {
-        const user = await getMe();
-        setUser(user);
+        const session = await getSession();
+        setUser(session as Session);
       } catch (error) {
         console.log(error);
       }
     };
-
     handleSession();
   }, []);
-
-  useEffect(() => {
-    console.log(user);
-  }, [user]);
 
   return (
     <div className="md:self-center">
@@ -50,7 +37,7 @@ export default function Sidebar({ session }: ISidebarProps) {
 
           <div className="flex items-center justify-between">
             <h2 className="text-base font-semibold text-gray-800">
-              {!!session && session.user?.name}
+              {!!user && user.user?.name}
             </h2>
             <Logout />
           </div>

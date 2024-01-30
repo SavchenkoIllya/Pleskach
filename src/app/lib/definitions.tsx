@@ -16,13 +16,6 @@ export interface IUser {
   whatsapp_link?: string;
 }
 
-class User {
-  public user: IUser;
-  constructor(user: IUser) {
-    this.user = user;
-  }
-}
-
 export interface IArticle {
   id: number;
   author_id: number;
@@ -33,3 +26,5 @@ export interface IArticle {
   updating_date?: Date;
   tags_array?: string[];
 }
+
+export type ErrorMessage = { message: string | undefined | null };

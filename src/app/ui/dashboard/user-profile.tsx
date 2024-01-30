@@ -3,6 +3,7 @@ import { IUser } from "@/app/lib/definitions";
 import { IComponentProps } from "../types/types";
 import { useEffect, useState } from "react";
 import clsx from "clsx";
+import { useForm } from "react-hook-form";
 
 interface IUserProfileProps extends IComponentProps {
   user: IUser;
@@ -10,6 +11,12 @@ interface IUserProfileProps extends IComponentProps {
 
 export const UserProfile = ({ user, ...rest }: IUserProfileProps) => {
   const [isEditing, setIsEditing] = useState<boolean>(false);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<Partial<IUser>>();
+
   const convertedUsername = user.name
     .split(" ")
     .reduce((acc, el, idx) => (acc += el[0]), "");
@@ -17,6 +24,8 @@ export const UserProfile = ({ user, ...rest }: IUserProfileProps) => {
   const handleToggle = () => {
     setIsEditing(!isEditing);
   };
+
+  const submit = () => {};
 
   return (
     <div className="leading-1.5 m-auto my-16 flex w-[310px] max-w-[500px] flex-col rounded-xl border-gray-200 bg-sky-600 shadow-xl shadow-accent/50 lg:w-auto">
@@ -38,35 +47,37 @@ export const UserProfile = ({ user, ...rest }: IUserProfileProps) => {
         </div>
       </div>
       {isEditing ? (
-        <form className="mx-6 mb-2 mt-6 flex max-w-md flex-col">
+        <form
+          onSubmit={handleSubmit(submit)}
+          className="mx-6 mb-2 mt-6 flex max-w-md flex-col"
+        >
           <div className="group relative z-0 mb-5 w-full">
-            <label className="paragraph text-white" htmlFor="floating_email">
+            <label className="paragraph text-white" htmlFor="name">
               Name
             </label>
             <input
               className="input-outlined"
-              type="email"
-              name="floating_email"
-              id="floating_email"
+              type="name"
+              id="name"
               placeholder=" "
               required
               value={user.name}
+              {...register("name", { required: true })}
             />
           </div>
           <div className="group relative z-0 mb-5 w-full">
-            <label htmlFor="floating_email">E-mail</label>
+            <label htmlFor="email">E-mail</label>
             <input
               className="input-outlined"
               type="email"
-              name="floating_email"
-              id="floating_email"
+              id="email"
               placeholder=" "
               value={user.email}
-              required
+              {...register("email", { required: true })}
             />
           </div>
           <div className="group relative z-0 mb-5 w-full">
-            <label htmlFor="floating_email">Phone</label>
+            <label htmlFor="phone">Phone</label>
             <input
               className="input-outlined"
               type="tel"
@@ -74,30 +85,29 @@ export const UserProfile = ({ user, ...rest }: IUserProfileProps) => {
               placeholder="+ 1 234 56 78 09"
               required
               value={user.phone}
+              {...register("phone")}
             />
           </div>
           <div className="group relative z-0 mb-5 w-full">
-            <label htmlFor="floating_email">What'sApp link</label>
+            <label htmlFor="what'sapp_link">What'sApp link</label>
             <input
               className="input-outlined"
-              type="email"
-              name="floating_email"
-              id="floating_email"
+              type="text"
+              id="what'sapp_link"
               placeholder=" "
-              required
               value={user.whatsapp_link}
+              {...register("whatsapp_link")}
             />
           </div>
           <div className="group relative z-0 mb-5 w-full">
-            <label htmlFor="floating_email">Telegram link</label>
+            <label htmlFor="telgram_link">Telegram link</label>
             <input
               className="input-outlined"
-              type="email"
-              name="floating_email"
-              id="floating_email"
+              type="text"
+              id="telgram_link"
               placeholder=" "
               value={user.telgram_link}
-              required
+              {...register("telgram_link")}
             />
           </div>
           <div className="mt-4 flex gap-8 self-center">
@@ -116,6 +126,7 @@ export const UserProfile = ({ user, ...rest }: IUserProfileProps) => {
         </form>
       ) : (
         <button
+          type="button"
           className="btn-dashboard-outline m-8 mt-0 self-end"
           onClick={handleToggle}
         >

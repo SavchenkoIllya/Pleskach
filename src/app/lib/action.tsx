@@ -5,39 +5,13 @@ import { revalidatePath } from "next/cache";
 import { unstable_noStore as noStore } from "next/cache";
 import { redirect } from "next/navigation";
 import { IUser } from "./definitions";
+import { Session } from "next-auth";
+import { ErrorMessage } from "./definitions";
+import { z } from "zod";
 
 const getCurrentDate = () => {
   return new Date().toISOString().split("T")[0];
 };
-
-export async function authenticate(formData: any) {
-  const { email, password } = formData;
-  try {
-    await signIn("credentials", {
-      email: email,
-      password: password,
-    });
-  } catch (error) {
-    return { message: "Cannot authenticate this user" };
-  }
-}
-
-export async function getMe() {
-  try {
-    const user = await auth();
-    return user;
-  } catch (error) {
-    return { message: error?.toString() };
-  }
-}
-
-export async function logout() {
-  try {
-    await signOut();
-  } catch {
-    return { message: "Cannot logout" };
-  }
-}
 
 export async function getPosts() {
   noStore();
@@ -80,19 +54,6 @@ export async function getPaginatedPosts(pageNum: number) {
     };
   } catch (error) {
     return { message: "Cannot get Posts" };
-  }
-}
-
-export async function getUser() {
-  noStore();
-  try {
-    const users = await sql`
-    SELECT id, name, phone, email, telgram_link, whatsapp_link
-    FROM users;
-    `;
-    return users.rows;
-  } catch (error) {
-    return { message: "Cannot get Users" };
   }
 }
 
@@ -231,3 +192,215 @@ export async function deleteArticle(id: number) {
   }
   redirect("/dashboard/articles");
 }
+
+// export async function getUser() {
+//   noStore();
+//   try {
+//     const users = await sql`
+//     SELECT id, name, phone, email, telgram_link, whatsapp_link
+//     FROM users;
+//     `;
+//     return users.rows;
+//   } catch (error) {
+//     return { message: "Cannot get Users" };
+//   }
+// }
+
+export interface ISessionUserService {
+  login(formData: FormData): Promise<void | ErrorMessage>;
+  getUserSession(): Promise<Session | ErrorMessage | null>;
+  logout(): Promise<void | ErrorMessage>;
+}
+
+class SessionUserServices implements ISessionUserService {
+  async login(formData: FormData) {
+    const { email, password } = {
+      email: formData.get("email"),
+      password: formData.get("password"),
+    };
+    try {
+      await signIn("credentials", {
+        email: email,
+        password: password,
+      });
+    } catch (error) {
+      return { message: "Error. Cannot authenticate this user" };
+    }
+  }
+
+  async getUserSession() {
+    try {
+      const user = await auth();
+      return user;
+    } catch (error) {
+      return { message: "Error. Cannot get current session" };
+    }
+  }
+
+  async logout() {
+    try {
+      await signOut();
+    } catch {
+      return { message: "Error. Cannot logout" };
+    }
+  }
+}
+
+const userSession = new SessionUserServices();
+/**
+ *
+ * @returns object that include information about user in field "user", and token expiration time
+ */
+const getSession = async () => userSession.getUserSession();
+/**
+ * Function that allows you to get current session information
+ * @param formData email and password
+ * @returns
+ */
+const login = async (formData: FormData) => userSession.login(formData);
+const logout = async () => userSession.logout();
+
+export { getSession, login, logout };
+
+interface IUserService {
+  getAllUsers(): Promise<IUser[] | ErrorMessage>;
+  createUser(user: Partial<IUser>): Promise<void | ErrorMessage>;
+  updateUser(id: number, user: Partial<IUser>): Promise<void | ErrorMessage>;
+  validateUser(formData: FormData): Partial<IUser> | Error;
+}
+
+const phoneRegex = new RegExp(
+  /^([+]?[\s0-9]+)?(\d{3}|[(]?[0-9]+[)])?([-]?[\s]?[0-9])+$/,
+);
+
+type Error = {
+  errors?: {
+    name?: string[] | undefined;
+    email?: string[] | undefined;
+    phone?: string[] | undefined;
+    telegram_link?: string[] | undefined;
+    whatsapp_link?: string[] | undefined;
+  };
+  message?: string | null | undefined;
+};
+
+const UserSchema = z.object({
+  id: z.number(),
+  name: z.string(),
+  email: z.string().email(),
+  phone: z
+    .string()
+    .regex(phoneRegex, "Invalid number")
+    .min(10, "Too short")
+    .max(14, "Too long"),
+  telgram_link: z.string().optional(),
+  whatsapp_link: z.string().optional(),
+});
+
+const UpdateUser = UserSchema.omit({ id: true });
+
+class UserService implements IUserService {
+  async getAllUsers(): Promise<IUser[] | ErrorMessage> {
+    try {
+      const data = await sql<IUser>`
+      SELECT id, name, phone, email, telgram_link, whatsapp_link
+      FROM users;
+      `;
+      const users = data.rows;
+      return users;
+    } catch (error) {
+      return { message: "Error. Cannot fetch Users" };
+    }
+  }
+
+  validateUser(formData: FormData): Partial<IUser> | Error {
+    const validatedFields = UpdateUser.safeParse({
+      name: formData.get("name"),
+      phone: formData.get("phone"),
+      email: formData.get("phone"),
+      telgram_link: formData.get("telgram_link"),
+      whatsapp_link: formData.get("whatsapp_link"),
+    });
+
+    if (!validatedFields.success) {
+      return {
+        errors: validatedFields.error.flatten().fieldErrors,
+        message: "Missing Fields. Failed to Create Invoice.",
+      };
+    }
+
+    const user = UpdateUser.parse({
+      name: formData.get("name"),
+      phone: formData.get("phone"),
+      email: formData.get("email"),
+      telgram_link: formData.get("telgram_link"),
+      whatsapp_link: formData.get("whatsapp_link"),
+    });
+
+    return user;
+  }
+
+  async updateUser(
+    id: number,
+    { name, phone, email, telgram_link, whatsapp_link }: Partial<IUser>,
+  ): Promise<void | ErrorMessage> {
+    try {
+      await sql`
+        UPDATE users
+        SET name = ${name},
+            phone = ${phone},
+            email = ${email},
+            telegram_link = ${telgram_link},
+            whatsapp_link = ${whatsapp_link}
+        WHERE id=${id};
+      `;
+      revalidatePath("/dashboard/profile");
+    } catch (error) {
+      return { message: "Error. Cannot update user" };
+    }
+  }
+
+  async createUser({
+    name,
+    phone,
+    email,
+    telgram_link,
+    whatsapp_link,
+  }: Partial<IUser>): Promise<void | ErrorMessage> {
+    try {
+      await sql`
+        INSERT INTO users (name, phone, email, telgram_link, whatsapp_link)
+        VALUES(${name}, ${phone}, ${email}, ${telgram_link}, ${whatsapp_link})
+      `;
+    } catch (error) {
+      return { message: "Error. Cannot create user" };
+    }
+  }
+}
+
+class ValidationError implements Error {}
+
+const user = new UserService();
+
+const getUsers = async () => user.getAllUsers();
+const updateUser = async (id: number, formData: FormData) => {
+  const validatedInputs = user.validateUser(formData);
+  
+  // Todo: check this if statement is it works in way like I want
+  // It's must check is validatedInputs gives Error
+  return validatedInputs instanceof ValidationError
+    ? validatedInputs
+    : user.updateUser(id, validatedInputs as Partial<IUser>);
+};
+
+const createUser = async (formData: FormData) => {
+  const validatedInputs = user.validateUser(formData);
+
+  // Todo: check this if statement is it works in way like I want
+  // It's must check is validatedInputs gives Error
+  return validatedInputs instanceof ValidationError
+    ? validatedInputs
+    : user.createUser(validatedInputs as Partial<IUser>);
+};
+
+export { getUsers, updateUser, createUser };

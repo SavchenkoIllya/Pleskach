@@ -19,7 +19,7 @@ export default async function Profile() {
           </div>
         }
       >
-        <UserProfile user={user} key={123} />
+        <UserProfile user={user} />
       </Suspense>
     </>
   );

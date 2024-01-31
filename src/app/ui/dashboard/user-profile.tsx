@@ -4,6 +4,7 @@ import { IComponentProps } from "../types/types";
 import { useEffect, useState } from "react";
 import clsx from "clsx";
 import { useForm } from "react-hook-form";
+import { updateUser } from "@/app/lib/action";
 
 interface IUserProfileProps extends IComponentProps {
   user: IUser;
@@ -15,7 +16,16 @@ export const UserProfile = ({ user, ...rest }: IUserProfileProps) => {
     register,
     handleSubmit,
     formState: { errors },
+    setValue,
   } = useForm<Partial<IUser>>();
+
+  useEffect(() => {
+    setValue("name", user.name || "");
+    setValue("email", user.email || "");
+    setValue("phone", user.phone || "");
+    setValue("telgram_link", user.telgram_link || "");
+    setValue("whatsapp_link", user.whatsapp_link || "");
+  }, []);
 
   const convertedUsername = user.name
     .split(" ")
@@ -25,7 +35,13 @@ export const UserProfile = ({ user, ...rest }: IUserProfileProps) => {
     setIsEditing(!isEditing);
   };
 
-  const submit = () => {};
+  const submit = async (data: Partial<IUser>) => {
+    try {
+      await updateUser(user.id, data).then((res) => console.log(res));
+    } catch (error: any) {
+      console.log(error?.message);
+    }
+  };
 
   return (
     <div className="leading-1.5 m-auto my-16 flex w-[310px] max-w-[500px] flex-col rounded-xl border-gray-200 bg-sky-600 shadow-xl shadow-accent/50 lg:w-auto">
@@ -58,10 +74,9 @@ export const UserProfile = ({ user, ...rest }: IUserProfileProps) => {
             <input
               className="input-outlined"
               type="name"
-              id="name"
+              id="name_input"
               placeholder=" "
               required
-              value={user.name}
               {...register("name", { required: true })}
             />
           </div>
@@ -70,9 +85,8 @@ export const UserProfile = ({ user, ...rest }: IUserProfileProps) => {
             <input
               className="input-outlined"
               type="email"
-              id="email"
+              id="email_input"
               placeholder=" "
-              value={user.email}
               {...register("email", { required: true })}
             />
           </div>
@@ -81,21 +95,19 @@ export const UserProfile = ({ user, ...rest }: IUserProfileProps) => {
             <input
               className="input-outlined"
               type="tel"
-              id="phone"
+              id="phone_input"
               placeholder="+ 1 234 56 78 09"
               required
-              value={user.phone}
               {...register("phone")}
             />
           </div>
           <div className="group relative z-0 mb-5 w-full">
-            <label htmlFor="what'sapp_link">What'sApp link</label>
+            <label htmlFor="whatsapp_link">What'sApp link</label>
             <input
               className="input-outlined"
               type="text"
               id="what'sapp_link"
               placeholder=" "
-              value={user.whatsapp_link}
               {...register("whatsapp_link")}
             />
           </div>
@@ -104,9 +116,8 @@ export const UserProfile = ({ user, ...rest }: IUserProfileProps) => {
             <input
               className="input-outlined"
               type="text"
-              id="telgram_link"
+              id="telgram_link_id"
               placeholder=" "
-              value={user.telgram_link}
               {...register("telgram_link")}
             />
           </div>

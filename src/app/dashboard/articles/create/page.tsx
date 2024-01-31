@@ -81,7 +81,7 @@ function formReducer(state: IFormState, action: FormAction): IFormState {
 export default function CreateArticle() {
   const {
     register,
-    handleSubmit,
+    handleSubmit, 
     setValue,
     reset,
     formState: { errors },

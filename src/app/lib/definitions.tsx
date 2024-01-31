@@ -27,4 +27,17 @@ export interface IArticle {
   tags_array?: string[];
 }
 
-export type ErrorMessage = { message: string | undefined | null };
+export type Error = {
+  errors?: {
+    name?: string[] | undefined;
+    email?: string[] | undefined;
+    phone?: string[] | undefined;
+    telegram_link?: string[] | undefined;
+    whatsapp_link?: string[] | undefined;
+  };
+  message?: string | null | undefined;
+};
+
+export interface Session{
+  
+}

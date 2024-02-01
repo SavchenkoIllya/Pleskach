@@ -1,7 +1,7 @@
 import { Button } from "@/app/ui/button";
 // import { CreateArticleForm } from "@/app/ui/dashboard/create-article-form";
 import { Card } from "@/app/ui/card";
-import { getArticles } from "@/app/lib/action";
+import { getArticles } from "@/app/lib/utils";
 import { Article } from "@/app/page";
 import { DashboardButton } from "@/app/ui/dashboard-button";
 import Link from "next/link";

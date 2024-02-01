@@ -4,7 +4,7 @@ import { DashboardButton } from "@/app/ui/dashboard-button";
 import MDEditor, { ContextStore } from "@uiw/react-md-editor";
 import rehypeSanitize from "rehype-sanitize";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { createArticle } from "@/app/lib/action";
+import { createArticle } from "@/app/lib/utils";
 import { Article } from "@/app/page";
 import Hint from "@/app/ui/dashboard/hint";
 

@@ -1,10 +1,12 @@
 "use client";
 import { IUser } from "@/app/lib/definitions";
 import { IComponentProps } from "../types/types";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import clsx from "clsx";
 import { useForm } from "react-hook-form";
-import { updateUser } from "@/app/lib/action";
+import { updateUser } from "@/app/lib/UserService";
+import { UserSchema } from "@/app/lib/Schemes";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 interface IUserProfileProps extends IComponentProps {
   user: IUser;
@@ -15,17 +17,18 @@ export const UserProfile = ({ user, ...rest }: IUserProfileProps) => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
-    setValue,
-  } = useForm<Partial<IUser>>();
-
-  useEffect(() => {
-    setValue("name", user.name || "");
-    setValue("email", user.email || "");
-    setValue("phone", user.phone || "");
-    setValue("telgram_link", user.telgram_link || "");
-    setValue("whatsapp_link", user.whatsapp_link || "");
-  }, []);
+    formState: { errors, isSubmitting },
+    setError,
+  } = useForm<Partial<IUser>>({
+    defaultValues: {
+      name: user.name || "",
+      email: user.email || "",
+      phone: user.phone || "",
+      telgram_link: user.telgram_link || "",
+      whatsapp_link: user.whatsapp_link || "",
+    },
+    resolver: zodResolver(UserSchema),
+  });
 
   const convertedUsername = user.name
     .split(" ")
@@ -35,10 +38,13 @@ export const UserProfile = ({ user, ...rest }: IUserProfileProps) => {
     setIsEditing(!isEditing);
   };
 
-  const submit = async (data: Partial<IUser>) => {
+  const submit = async (data: any) => {
     try {
-      await updateUser(user.id, data).then((res) => console.log(res));
+      await updateUser(user.id, data);
     } catch (error: any) {
+      setError("root", {
+        message: error.message,
+      });
       console.log(error?.message);
     }
   };
@@ -77,8 +83,13 @@ export const UserProfile = ({ user, ...rest }: IUserProfileProps) => {
               id="name_input"
               placeholder=" "
               required
-              {...register("name", { required: true })}
+              {...register("name")}
             />
+            {errors.name && (
+              <p className="my-2 text-center text-red-500">
+                {errors.name.message}
+              </p>
+            )}
           </div>
           <div className="group relative z-0 mb-5 w-full">
             <label htmlFor="email">E-mail</label>
@@ -87,8 +98,13 @@ export const UserProfile = ({ user, ...rest }: IUserProfileProps) => {
               type="email"
               id="email_input"
               placeholder=" "
-              {...register("email", { required: true })}
+              {...register("email")}
             />
+            {errors.email && (
+              <p className="my-2 text-center text-red-500">
+                {errors.email.message}
+              </p>
+            )}
           </div>
           <div className="group relative z-0 mb-5 w-full">
             <label htmlFor="phone">Phone</label>
@@ -97,9 +113,13 @@ export const UserProfile = ({ user, ...rest }: IUserProfileProps) => {
               type="tel"
               id="phone_input"
               placeholder="+ 1 234 56 78 09"
-              required
               {...register("phone")}
             />
+            {errors.phone && (
+              <p className="my-2 text-center text-red-500">
+                {errors.phone.message}
+              </p>
+            )}
           </div>
           <div className="group relative z-0 mb-5 w-full">
             <label htmlFor="whatsapp_link">What'sApp link</label>
@@ -110,6 +130,11 @@ export const UserProfile = ({ user, ...rest }: IUserProfileProps) => {
               placeholder=" "
               {...register("whatsapp_link")}
             />
+            {errors.whatsapp_link && (
+              <p className="my-2 text-center text-red-500">
+                {errors.whatsapp_link.message}
+              </p>
+            )}
           </div>
           <div className="group relative z-0 mb-5 w-full">
             <label htmlFor="telgram_link">Telegram link</label>
@@ -120,10 +145,19 @@ export const UserProfile = ({ user, ...rest }: IUserProfileProps) => {
               placeholder=" "
               {...register("telgram_link")}
             />
+            {errors.telgram_link && (
+              <p className="my-2 text-center text-red-500">
+                {errors.telgram_link.message}
+              </p>
+            )}
           </div>
           <div className="mt-4 flex gap-8 self-center">
-            <button className="btn-dashboard-outline" type="submit">
-              Save
+            <button
+              className="btn-dashboard-outline"
+              disabled={isSubmitting ? true : false}
+              type="submit"
+            >
+              {isSubmitting ? "Saving..." : "Save"}
             </button>
             <button
               className="btn-dashboard-cancel text-white hover:text-white/75"
@@ -134,6 +168,7 @@ export const UserProfile = ({ user, ...rest }: IUserProfileProps) => {
               Discard
             </button>
           </div>
+          {errors.root && errors.root.message}
         </form>
       ) : (
         <button

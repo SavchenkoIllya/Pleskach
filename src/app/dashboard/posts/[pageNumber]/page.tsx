@@ -1,25 +1,25 @@
-import { getPaginatedPosts } from "@/app/lib/action";
-import { IPosts } from "@/app/lib/definitions";
-import { Message } from "@/app/ui/dashboard/message";
-import CustomPagination from "@/app/ui/dashboard/pagination-core";
-import { Suspense } from "react";
-import clsx from "clsx";
+// import { getPaginatedPosts } from "@/app/lib/action";
+// import { IPosts } from "@/app/lib/definitions";
+// import { Message } from "@/app/ui/dashboard/message";
+// import CustomPagination from "@/app/ui/dashboard/pagination-core";
+// import { Suspense } from "react";
+// import clsx from "clsx";
 import { PostSkeleton } from "@/app/ui/suspense/posts-suspence";
 
 export default async function Posts(req: { params: { pageNumber: number } }) {
-  const page = Number(req.params.pageNumber) || 1;
-  const paginatedPosts = await getPaginatedPosts(page);
-  const posts = paginatedPosts.data as IPosts[];
-  const totalContent = paginatedPosts.totalContent;
-  const contentOnPage = paginatedPosts.contentOnPage;
+  // const page = Number(req.params.pageNumber) || 1;
+  // const paginatedPosts = await getPaginatedPosts(page);
+  // const posts = paginatedPosts.data as IPosts[];
+  // const totalContent = paginatedPosts.totalContent;
+  // const contentOnPage = paginatedPosts.contentOnPage;
 
-  const handleNavigation = (e: any) => {
-    if (e) console.log(e);
-  };
+  // const handleNavigation = (e: any) => {
+  //   if (e) console.log(e);
+  // };
 
   return (
-    <div className="p-4 flex flex-col justify-between items-center min-h-[100dvh]">
-      <div className="flex justify-center items-center gap-4 flex-col">
+    <div className="flex min-h-[100dvh] flex-col items-center justify-between p-4">
+      {/* <div className="flex justify-center items-center gap-4 flex-col">
         <Suspense fallback={<PostSkeleton />}>
           {posts?.map((el: any) => {
             return (
@@ -46,7 +46,7 @@ export default async function Posts(req: { params: { pageNumber: number } }) {
             currentPage={page}
           />
         )}
-      </Suspense>
+      </Suspense> */}
     </div>
   );
 }

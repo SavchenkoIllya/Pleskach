@@ -7,7 +7,7 @@ import { useForm, SubmitHandler } from "react-hook-form";
 // import { createArticle } from "@/app/lib/action";
 // import { ArticleInputs } from "./create-article-form";
 import { Article } from "@/app/page";
-import { updateArticle, deleteArticle } from "@/app/lib/action";
+import { updateArticle, deleteArticle } from "@/app/lib/utils";
 
 export const EditArticleForm = (props: { data: Article }) => {
   const article = props.data;

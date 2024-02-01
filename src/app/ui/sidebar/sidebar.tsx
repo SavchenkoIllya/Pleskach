@@ -7,7 +7,8 @@ import { SidebarWrapper } from "./sidebar-wrapper";
 import { Session } from "next-auth";
 import { IComponentProps } from "../types/types";
 import { useEffect, useState } from "react";
-import { getSession } from "@/app/lib/action";
+// import { getSession } from "@/app/lib/action";
+import { getSession } from "@/app/lib/Session.service";
 
 interface ISidebarProps extends IComponentProps {
   session?: Session;
@@ -15,6 +16,7 @@ interface ISidebarProps extends IComponentProps {
 
 export default function Sidebar({ session }: ISidebarProps) {
   const [user, setUser] = useState<Session>();
+
   useEffect(() => {
     const handleSession = async () => {
       try {

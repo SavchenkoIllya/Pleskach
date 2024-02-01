@@ -10,7 +10,7 @@ import { Form } from "./ui/form";
 import { Container } from "./ui/container";
 import { Header } from "./ui/header";
 import { useEffect, useState } from "react";
-import { getArticles } from "./lib/action";
+import { getArticles } from "./lib/utils";
 
 export interface Article {
   id: number;

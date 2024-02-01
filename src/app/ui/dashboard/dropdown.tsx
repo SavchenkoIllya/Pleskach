@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
-import { deletePost, markPostAsRead } from "@/app/lib/action";
+import { deletePost, markPostAsRead } from "@/app/lib/utils";
 import clsx from "clsx";
 
 type DropdownProps = {

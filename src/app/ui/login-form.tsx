@@ -1,7 +1,7 @@
 "use client";
 import { Button } from "./button";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { authenticate } from "../lib/action";
+import { authenticate } from "../lib/utils";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { IUser } from "../lib/definitions";

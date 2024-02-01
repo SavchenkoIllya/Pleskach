@@ -1,4 +1,4 @@
-import { logout } from "../lib/action";
+import { logout } from "../lib/Session.service";
 
 export default function Logout() {
   const handleLogout = async () => {

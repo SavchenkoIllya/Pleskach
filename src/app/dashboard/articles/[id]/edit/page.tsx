@@ -1,4 +1,4 @@
-import { getArticleById } from "@/app/lib/action";
+import { getArticleById } from "@/app/lib/utils";
 import { Article } from "@/app/page";
 import { EditArticleForm } from "@/app/ui/dashboard/edit-article-form";
 

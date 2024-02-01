@@ -1,7 +1,7 @@
 "use client";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { Button } from "./button";
-import { createPost } from "../lib/action";
+import { createPost } from "../lib/utils";
 import { useEffect, useState } from "react";
 // import useTimeout from "../utils/hooks/useTimeout";
 

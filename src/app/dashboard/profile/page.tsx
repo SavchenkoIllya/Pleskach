@@ -1,5 +1,6 @@
 // import { getUser } from "@/app/lib/action";
-import { getUsers } from "@/app/lib/action";
+// import { getUsers } from "@/app/lib/action";
+import { getUsers } from "@/app/lib/UserService";
 import { IUser } from "@/app/lib/definitions";
 import { UserProfile } from "@/app/ui/dashboard/user-profile";
 import { Suspense } from "react";

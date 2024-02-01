@@ -4,7 +4,7 @@ export interface IPosts {
   telephone: string;
   problem: string;
   is_read: false;
-  date: Date;
+  date: Date | string;
 }
 
 export interface IUser {
@@ -22,22 +22,18 @@ export interface IArticle {
   title: string;
   content: string;
   is_published: boolean;
-  creation_date: Date;
-  updating_date?: Date;
+  creation_date: Date | string;
+  updating_date?: Date | string;
   tags_array?: string[];
 }
 
-export type Error = {
+export type ServiceError = {
   errors?: {
-    name?: string[] | undefined;
-    email?: string[] | undefined;
-    phone?: string[] | undefined;
-    telegram_link?: string[] | undefined;
-    whatsapp_link?: string[] | undefined;
+    name?: string[];
+    email?: string[];
+    phone?: string[];
+    telegram_link?: string[];
+    whatsapp_link?: string[];
   };
-  message?: string | null | undefined;
+  message?: string;
 };
-
-export interface Session{
-  
-}

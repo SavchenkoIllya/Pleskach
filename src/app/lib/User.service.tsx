@@ -88,7 +88,6 @@ class UserService implements IUserService {
           VALUES(${name}, ${phone}, ${email}, ${telgram_link}, ${whatsapp_link})
         `;
     } catch (error) {
-      //   return { message: "Error. Cannot create user" };
       throw new Error("Error. Cannot create user");
     }
   }

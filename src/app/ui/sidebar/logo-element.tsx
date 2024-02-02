@@ -1,24 +1,24 @@
 import clsx from "clsx";
 import { PROJECT_NAME } from "@/app/lib/projectConstants";
 import { IComponentProps } from "../types/types";
+import { LOGO_COLOR } from "@/app/lib/projectConstants";
 
-const LOGO_COLOR = "#0284c7";
 export const LogoElement = ({ className }: IComponentProps) => {
   return (
     <a
       className={clsx(
-        "flex items-center text-gray-600 transition-colors duration-300 transform rounded-lg ",
-        className
+        "flex transform items-center rounded-lg text-gray-600 transition-colors duration-300 ",
+        className,
       )}
       href="#"
     >
-      <div className="flex justify-center items-center gap-2">
+      <div className="flex items-center justify-center gap-2">
         <svg
           data-name="015_HEALTH"
           id="_015_HEALTH"
           width={"50px"}
-          viewBox="0 0 24 24"
           height={"50px"}
+          viewBox="0 0 24 24"
           xmlns="http://www.w3.org/2000/svg"
         >
           <path

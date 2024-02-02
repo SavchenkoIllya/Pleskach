@@ -4,6 +4,7 @@ import { getSession } from "./Session.service";
 import { getCurrentDate } from "./utils";
 import { Session } from "next-auth";
 import { sql } from "@vercel/postgres";
+import { revalidatePath } from "next/cache";
 
 // create functional class implementation
 
@@ -24,13 +25,10 @@ interface IArticlesService {
     formData: IArticleForm,
   ): Promise<void | ServiceError>;
   deleteArticle(id: number): Promise<void | ServiceError>;
-  parseArticleData(
-    formData: IArticleForm,
-  ): Promise<IArticleForm | ServiceError>;
 }
 
 class ArticleService implements IArticlesService {
-  async parseArticleData(
+  private async parseArticleData(
     formData: IArticleForm,
   ): Promise<IArticleForm | ServiceError> {
     const session = (await getSession()) as Session;
@@ -49,14 +47,10 @@ class ArticleService implements IArticlesService {
     return { userName, title, content, published, date, tags };
   }
 
-  async createArticles({
-    userName,
-    title,
-    content,
-    published,
-    date,
-    tags,
-  }: IArticleForm): Promise<void | ServiceError> {
+  async createArticles(formData: IArticleForm): Promise<void | ServiceError> {
+    const { userName, title, content, published, date, tags } =
+      (await this.parseArticleData(formData)) as IArticleForm;
+
     try {
       const matchedUser = await sql`
         SELECT * FROM users
@@ -64,7 +58,6 @@ class ArticleService implements IArticlesService {
         `;
       const userId = matchedUser.rows[0].id;
 
-      // Find a solution for error type sting[] is not assignable for type Primitive
       await sql`
         INSERT INTO articles (title, author_id, content, is_published, creation_date, tags_array)
         VALUES(${title}, ${userId}, ${content}, ${published}, ${date}, ${tags as any})
@@ -76,9 +69,10 @@ class ArticleService implements IArticlesService {
 
   async updateArticle(
     id: number,
-    { title, content, published, date, tags }: IArticleForm,
+    formData: IArticleForm,
   ): Promise<void | ServiceError> {
-    tags = Array.isArray(tags) ? tags : [""];
+    const { userName, title, content, published, date, tags } =
+      (await this.parseArticleData(formData)) as IArticleForm;
     try {
       await sql`
         UPDATE articles
@@ -128,6 +122,28 @@ class ArticleService implements IArticlesService {
     } catch (error) {
       return { message: "Cannot delete article by this id" };
     }
-    // redirect("/dashboard/articles");
+    revalidatePath("/dashboard/articles");
   }
 }
+
+const articles = new ArticleService();
+
+const getArticles = async () => await articles.getArticles();
+
+const getArticleById = async (id: number) => await articles.getArticleById(id);
+
+const createArticle = async (formData: IArticleForm) =>
+  await articles.createArticles(formData);
+
+const updateArticle = async (id: number, formData: IArticleForm) =>
+  await articles.updateArticle(id, formData);
+
+const deleteArticle = async (id: number) => await articles.deleteArticle(id);
+
+export {
+  getArticles,
+  getArticleById,
+  createArticle,
+  updateArticle,
+  deleteArticle,
+};

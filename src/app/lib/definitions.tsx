@@ -27,13 +27,7 @@ export interface IArticle {
   tags_array?: string[];
 }
 
-export type ServiceError = {
-  errors?: {
-    name?: string[];
-    email?: string[];
-    phone?: string[];
-    telegram_link?: string[];
-    whatsapp_link?: string[];
-  };
+export interface ServiceError {
+  errors?: Record<string, string[]>;
   message?: string;
-};
+}

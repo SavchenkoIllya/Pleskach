@@ -9,9 +9,13 @@
 }
 
 @layer components {
+  .container-h {
+    min-height: calc(100dvh - 2rem);
+  }
+
   .btn-dashboard-primary {
     /* @apply mb-2 me-2 w-fit rounded-lg bg-sky-600 px-5 py-2.5 text-center text-sm font-medium text-white transition duration-500 ease-in-out hover:bg-sky-500 dark:bg-slate-800 dark:hover:bg-slate-700; */
-    @apply mb-2 me-2 w-fit rounded-lg bg-sky-600 px-5 py-2.5 text-center text-sm font-medium text-white transition duration-500 ease-in-out hover:scale-[1.025] hover:bg-sky-500;
+    @apply mb-2 me-2 w-fit rounded-lg bg-sky-600 px-4 py-2 text-center text-sm font-medium text-white transition duration-500 ease-in-out hover:scale-[1.025] hover:bg-sky-500;
   }
 
   .btn-dashboard-outline {
@@ -65,6 +69,10 @@
     -webkit-backdrop-filter: blur(4px);
     border-radius: 10px;
     border: 1px solid rgba(255, 255, 255, 0.18);
+  }
+
+  .soft-shadow {
+    @apply shadow-[0_3px_10px_rgb(0,0,0,0.2)];
   }
 }
 

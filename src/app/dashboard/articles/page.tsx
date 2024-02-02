@@ -1,13 +1,15 @@
 import { Button } from "@/app/ui/button";
 // import { CreateArticleForm } from "@/app/ui/dashboard/create-article-form";
 import { Card } from "@/app/ui/card";
-import { getArticles } from "@/app/lib/utils";
-import { Article } from "@/app/page";
+// import { getArticles } from "@/app/lib/utils";
+import { getArticles } from "@/app/lib/Articles.service";
+// import { Article } from "@/app/page";
 import { DashboardButton } from "@/app/ui/dashboard-button";
 import Link from "next/link";
+import { IArticle } from "@/app/lib/definitions";
 
 export default async function Articles() {
-  const articles = (await getArticles()) as Article[];
+  const articles = (await getArticles()) as IArticle[];
 
   return (
     <div className="flex h-[100%] flex-col p-4">
@@ -26,7 +28,7 @@ export default async function Articles() {
               id={article.id}
               link={`/dashboard/articles/${article.id}/edit`}
               title={article.title}
-              imgSrc={article.image}
+              // imgSrc={article.image}
               content={article.content}
             />
           );

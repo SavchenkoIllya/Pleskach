@@ -10,7 +10,7 @@ import { IComponentProps } from "./types/types";
 interface ICard extends IComponentProps {
   id: number;
   title: string;
-  imgSrc: string;
+  imgSrc?: string;
   link: any;
   content: string;
 }

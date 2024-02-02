@@ -4,9 +4,10 @@ import { IComponentProps } from "../types/types";
 import { useState } from "react";
 import clsx from "clsx";
 import { useForm } from "react-hook-form";
-import { updateUser } from "@/app/lib/UserService";
+import { updateUser } from "@/app/lib/User.service";
 import { UserSchema } from "@/app/lib/Schemes";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Avatar } from "../ui/dashboard/avatar";
 
 interface IUserProfileProps extends IComponentProps {
   user: IUser;
@@ -30,9 +31,9 @@ export const UserProfile = ({ user, ...rest }: IUserProfileProps) => {
     resolver: zodResolver(UserSchema),
   });
 
-  const convertedUsername = user.name
-    .split(" ")
-    .reduce((acc, el, idx) => (acc += el[0]), "");
+  // const convertedUsername = user.name
+  //   .split(" ")
+  //   .reduce((acc, el, idx) => (acc += el[0]), "");
 
   const handleToggle = () => {
     setIsEditing(!isEditing);
@@ -57,9 +58,10 @@ export const UserProfile = ({ user, ...rest }: IUserProfileProps) => {
             "glass mx-auto -mt-8 mb-4 flex items-center gap-4 rounded-lg p-2 transition lg:mx-0 lg:-ml-16 lg:-mt-10 lg:p-8",
           )}
         >
-          <div className="flex h-[75px] w-[75px] items-center justify-center rounded-full bg-gradient-to-br from-pink-600 to-fuchsia-800 text-4xl font-bold text-white/75">
+          <Avatar username={user.name} />
+          {/* <div className="flex h-[75px] w-[75px] items-center justify-center rounded-full bg-gradient-to-br from-pink-600 to-fuchsia-800 text-4xl font-bold text-white/75">
             {convertedUsername}
-          </div>
+          </div> */}
           <div>
             <h2 className="h2 max-w-[150px] text-xl text-white lg:max-w-fit lg:text-2xl">
               {user.name}

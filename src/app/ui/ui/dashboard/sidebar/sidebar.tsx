@@ -1,8 +1,47 @@
 "use client";
-import { usePathname } from "next/navigation";
-import { NavElement } from "./nav-element";
-import { ChildrenProps } from "../types/types";
+import { LogoElement } from "@/app/ui/sidebar/logo-element";
 import { ICONS_SIZE } from "@/app/lib/projectConstants";
+import { ChildrenProps } from "@/app/ui/types/types";
+import { usePathname } from "next/navigation";
+import { NavElement } from "@/app/ui/sidebar/nav-element";
+import Logout from "@/app/ui/logout";
+
+export const Sidebar = () => {
+  const pathname = usePathname();
+
+  const getCurrent = (label: string) =>
+    pathname.split("/").includes(label?.toLowerCase());
+
+  return (
+    <aside
+      className="mx-4 my-8 flex min-w-[300px] flex-col gap-8 rounded-lg bg-white p-8 shadow-xl transition duration-300"
+      id="sidebar"
+    >
+      <LogoElement />
+
+      <div
+        id="sidebar-content-wrapper"
+        className="flex h-full flex-col justify-between"
+      >
+        <nav id="navigation">
+          <ul className="flex flex-col gap-2">
+            {arrayToRender.map((el, idx) => {
+              return (
+                <NavElement
+                  isCurrent={getCurrent(el.name)}
+                  href={el.href}
+                  key={idx}
+                >
+                  {el.children}
+                </NavElement>
+              );
+            })}
+          </ul>
+        </nav>
+      </div>
+    </aside>
+  );
+};
 
 type RenderElementsType = {
   name: string;
@@ -27,9 +66,7 @@ const arrayToRender: RenderElementsType[] = [
           <path d="M5,1v30h22V1H5z M8.6230469,3.9345703h3.6884766c0.5527344,0,1,0.4477539,1,1s-0.4472656,1-1,1H8.6230469  c-0.5527344,0-1-0.4477539-1-1S8.0703125,3.9345703,8.6230469,3.9345703z M23.3769531,22.6557617H8.6230469  c-0.5527344,0-1-0.4477539-1-1s0.4472656-1,1-1h14.7539063c0.5527344,0,1,0.4477539,1,1  S23.9296875,22.6557617,23.3769531,22.6557617z M23.3769531,18.8852539H8.6230469c-0.5527344,0-1-0.4477539-1-1s0.4472656-1,1-1  h14.7539063c0.5527344,0,1,0.4477539,1,1S23.9296875,18.8852539,23.3769531,18.8852539z M23.3769531,15.1147461H8.6230469  c-0.5527344,0-1-0.4477539-1-1s0.4472656-1,1-1h14.7539063c0.5527344,0,1,0.4477539,1,1  S23.9296875,15.1147461,23.3769531,15.1147461z M23.3769531,11.3442383H12.3115234c-0.5527344,0-1-0.4477539-1-1s0.4472656-1,1-1  h11.0654297c0.5527344,0,1,0.4477539,1,1S23.9296875,11.3442383,23.3769531,11.3442383z" />
         </svg>
 
-        <span className={"mx-2 text-sm font-medium text-gray-700"}>
-          Articles
-        </span>
+        <span className={"mx-2 text-sm font-medium"}>Articles</span>
       </>
     ),
   },
@@ -53,9 +90,7 @@ const arrayToRender: RenderElementsType[] = [
             </g>
           </g>
         </svg>
-        <span className="mx-2 text-sm font-medium text-gray-700">
-          User Preferences
-        </span>
+        <span className="mx-2 text-sm font-medium">User Preferences</span>
       </>
     ),
   },
@@ -79,33 +114,8 @@ const arrayToRender: RenderElementsType[] = [
             />
           </g>
         </svg>
-        <span className="mx-2 text-sm font-medium text-gray-700">Letters</span>
+        <span className="mx-2 text-sm font-medium">Letters</span>
       </>
     ),
   },
 ];
-
-export const Navigation = () => {
-  const pathname = usePathname();
-
-  const getCurrent = (label: string) =>
-    pathname.split("/").includes(label?.toLowerCase());
-
-  return (
-    <nav>
-      <ul className="-mx-3 space-y-4">
-        {arrayToRender.map((el, idx) => {
-          return (
-            <NavElement
-              isCurrent={getCurrent(el.name)}
-              href={el.href}
-              key={idx}
-            >
-              {el.children}
-            </NavElement>
-          );
-        })}
-      </ul>
-    </nav>
-  );
-};

@@ -1,9 +1,10 @@
-import React from "react";
+import React, { ReactNode } from "react";
 
 export type ChildrenProps =
   | string
   | JSX.Element
   | JSX.Element[]
+  | ReactNode
   | React.ReactElement
   | React.ReactElement[];
 
@@ -20,5 +21,5 @@ export interface IRestProps {
 }
 
 export interface IButtonProps extends IComponentProps {
-    as?: ChildrenProps;
-  }
+  as?: ChildrenProps;
+}

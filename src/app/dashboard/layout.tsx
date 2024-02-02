@@ -1,5 +1,6 @@
 import { auth } from "@/auth";
-import Sidebar from "../ui/sidebar/sidebar";
+import { Sidebar } from "../ui/ui/dashboard/sidebar/sidebar";
+import { Content } from "../ui/ui/dashboard/content";
 
 export default async function Layout({
   children,
@@ -9,11 +10,9 @@ export default async function Layout({
   const session = await auth();
 
   return (
-    <div className="bg-dashboard flex">
-      <Sidebar session={session!} />
-      <div className="mt-12 min-h-[100dvh] w-[100%] md:ml-80 md:mt-0">
-        {children}
-      </div>
+    <div id="dashboard-wrapper" className="flex bg-gray-100 min-h-[100dvh]">
+      <Sidebar />
+      <Content>{children}</Content>
     </div>
   );
 }

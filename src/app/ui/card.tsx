@@ -16,48 +16,61 @@ interface ICard extends IComponentProps {
 }
 
 export const Card = ({ title, imgSrc, link, content, id, ...props }: ICard) => {
+  // let imgSource = content.match(/https?:\/\/[^\s]+/)?.[0];
+
+  let restContent: string = content.split(")")[1];
+  let image = content.split(")")[0].match(/https?:\/\/[^\s]+/)?.[0];
+
+  // console.log(content.split(")")[0].match(/https?:\/\/[^\s]+/)?.[0]);
+
+  // console.log(imgSource);
+  // let isImage: boolean;
+  // if (imgSource) {
+  //   isImage = true;
+  // }
+
   return (
     <article
-      className="w-[300px] bg-background rounded-lg transition-transform hover:scale-[1.025] shadow-xl shadow-accent/15"
+      className="w-[300px] rounded-lg bg-background shadow-xl shadow-accent/15 transition-transform hover:scale-[1.025]"
       {...props}
     >
       <Link href={link}>
         <img
-          className="rounded-t-lg w-[100%]
-        [aspect-ratio:4/3]
-        [object-fit:cover]
-        [object-position:50% 50%]
+          className="[object-position:50% 50%]
+        w-[100%]
+        rounded-t-lg
+        [aspect-ratio:4/3] [object-fit:cover]
         "
-          src={imgSrc || defaultPicture.src}
+          src={imgSrc || image || defaultPicture.src}
           alt=""
         />
       </Link>
       <div className="p-5">
         <Link href={link}>
           <Heading
-            className="mb-2 h-[64px] tracking-tight text-heading [-webkit-line-clamp:2] 
-            [-webkit-box-orient:vertical]   
+            className="mb-2 h-[64px] tracking-tight text-heading [-webkit-box-orient:vertical] 
+            [-webkit-line-clamp:2]   
             [overflow:hidden]"
           >
             {title}
           </Heading>
         </Link>
         <div
-          className="mb-3 [display:-webkit-box] 
-                    [-webkit-line-clamp:3] 
+          className="mb-3 h-[72px] 
+                    text-plane-text 
                     [-webkit-box-orient:vertical]   
-                    [overflow:hidden] text-plane-text
-                    h-[72px]"
+                    [overflow:hidden] [-webkit-line-clamp:3]
+                    [display:-webkit-box]"
         >
-          <Remark>{content}</Remark>
+          <Remark>{restContent ? restContent : content}</Remark>
         </div>
         <Link
           href={link}
-          className="inline-flex items-center text-sm font-medium text-center text-accent rounded-lg focus:ring-4 focus:outline-none"
+          className="inline-flex items-center rounded-lg text-center text-sm font-medium text-accent focus:outline-none focus:ring-4"
         >
           Read more
           <svg
-            className="rtl:rotate-180 w-3.5 h-3.5 ms-2"
+            className="ms-2 h-3.5 w-3.5 rtl:rotate-180"
             aria-hidden="true"
             xmlns="http://www.w3.org/2000/svg"
             fill="none"

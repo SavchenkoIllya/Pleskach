@@ -10,7 +10,7 @@ import { Form } from "./ui/form";
 import { Container } from "./ui/container";
 import { Header } from "./ui/header";
 import { useEffect, useState } from "react";
-import { getArticles } from "./lib/utils";
+// import { getArticles } from "./lib/utils";
 
 export interface Article {
   id: number;
@@ -27,16 +27,16 @@ export interface Article {
 export default function Home() {
   const [articles, setArticles] = useState<Article[]>([]);
 
-  useEffect(() => {
-    const fetchArticles = async () => {
-      const articles = await getArticles();
-      return articles;
-    };
+  // useEffect(() => {
+  //   const fetchArticles = async () => {
+  //     const articles = await getArticles();
+  //     return articles;
+  //   };
 
-    fetchArticles().then((d) => {
-      setArticles(d as Article[]);
-    });
-  }, []);
+  //   fetchArticles().then((d) => {
+  //     setArticles(d as Article[]);
+  //   });
+  // }, []);
 
   return (
     <>

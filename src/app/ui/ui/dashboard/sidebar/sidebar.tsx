@@ -4,42 +4,93 @@ import { ICONS_SIZE } from "@/app/lib/projectConstants";
 import { ChildrenProps } from "@/app/ui/types/types";
 import { usePathname } from "next/navigation";
 import { NavElement } from "@/app/ui/sidebar/nav-element";
-import Logout from "@/app/ui/logout";
+// import Logout from "@/app/ui/logout";
+import { useState, useRef, useEffect } from "react";
+import clsx from "clsx";
 
 export const Sidebar = () => {
   const pathname = usePathname();
+  const [isOpened, setOpened] = useState<boolean>(false);
+  const sidebarRef = useRef<HTMLDivElement>(null);
 
   const getCurrent = (label: string) =>
     pathname.split("/").includes(label?.toLowerCase());
 
-  return (
-    <aside
-      className="mx-4 my-8 flex min-w-[300px] flex-col gap-8 rounded-lg bg-white p-8 shadow-xl transition duration-300"
-      id="sidebar"
-    >
-      <LogoElement />
+  useEffect(() => {
+    const handleOutsideClick = (e: MouseEvent) => {
+      if (!sidebarRef.current?.contains(e.target as Node)) {
+        setOpened(false);
+      }
+    };
 
-      <div
-        id="sidebar-content-wrapper"
-        className="flex h-full flex-col justify-between"
+    if (isOpened) {
+      document.addEventListener("click", handleOutsideClick);
+    } else {
+      document.removeEventListener("click", handleOutsideClick);
+    }
+
+    return () => {
+      document.removeEventListener("click", handleOutsideClick);
+    };
+  }, [isOpened]);
+
+  const handleClick = () => {
+    setOpened((prev) => !prev);
+  };
+
+  return (
+    <>
+      <button
+        onClick={handleClick}
+        className={clsx(
+          "btn-dashboard-primary transition-all fixed ml-4 mt-8 h-fit md:hidden",
+          isOpened && "hidden",
+        )}
       >
-        <nav id="navigation">
-          <ul className="flex flex-col gap-2">
-            {arrayToRender.map((el, idx) => {
-              return (
-                <NavElement
-                  isCurrent={getCurrent(el.name)}
-                  href={el.href}
-                  key={idx}
-                >
-                  {el.children}
-                </NavElement>
-              );
-            })}
-          </ul>
-        </nav>
-      </div>
-    </aside>
+        <svg
+          fill="white"
+          stroke="white"
+          height={20}
+          width={20}
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+        >
+          <title>menu</title>
+          <path d="M3,6H21V8H3V6M3,11H21V13H3V11M3,16H21V18H3V16Z" />
+        </svg>
+      </button>
+      <aside
+        ref={sidebarRef}
+        className={clsx(
+          "z-[5] mx-4 my-8 flex min-w-[300px] flex-col gap-8 rounded-lg bg-white p-8 shadow-xl transition-all duration-300 md:ml-4",
+          isOpened ? "ml-4" : "-ml-80",
+        )}
+        id="sidebar"
+      >
+        <LogoElement />
+
+        <div
+          id="sidebar-content-wrapper"
+          className="flex h-full flex-col justify-between"
+        >
+          <nav id="navigation">
+            <ul className="flex flex-col gap-2">
+              {arrayToRender.map((el, idx) => {
+                return (
+                  <NavElement
+                    isCurrent={getCurrent(el.name)}
+                    href={el.href}
+                    key={idx}
+                  >
+                    {el.children}
+                  </NavElement>
+                );
+              })}
+            </ul>
+          </nav>
+        </div>
+      </aside>
+    </>
   );
 };
 

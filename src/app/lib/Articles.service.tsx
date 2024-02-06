@@ -4,14 +4,13 @@ import { getSession } from "./Session.service";
 import { getCurrentDate } from "./utils";
 import { Session } from "next-auth";
 import { sql } from "@vercel/postgres";
-import { revalidatePath } from "next/cache";
-
-// create functional class implementation
+import { revalidatePath, unstable_noStore as noStore } from "next/cache";
+import { redirect } from "next/navigation";
 
 interface IArticleForm extends Partial<IArticle> {
   tags?: string | string[] | null;
   tagsArray?: string[] | null;
-  published?: true;
+  is_published?: boolean;
   userName?: string | null;
   date: string;
 }
@@ -42,13 +41,14 @@ class ArticleService implements IArticlesService {
       return e.replace(/(\r\n|\n|\r)/gm, "");
     });
 
-    const { title, content, published } = formData;
+    const { title, content, is_published } = formData;
+
     const date = getCurrentDate();
-    return { userName, title, content, published, date, tags };
+    return { userName, title, content, is_published, date, tags };
   }
 
   async createArticles(formData: IArticleForm): Promise<void | ServiceError> {
-    const { userName, title, content, published, date, tags } =
+    const { userName, title, content, is_published, date, tags } =
       (await this.parseArticleData(formData)) as IArticleForm;
 
     try {
@@ -60,9 +60,10 @@ class ArticleService implements IArticlesService {
 
       await sql`
         INSERT INTO articles (title, author_id, content, is_published, creation_date, tags_array)
-        VALUES(${title}, ${userId}, ${content}, ${published}, ${date}, ${tags as any})
+        VALUES(${title}, ${userId}, ${content}, ${is_published}, ${date}, ${tags as any})
         `;
     } catch (error) {
+      console.log(error);
       return { message: "Cannot create new article" };
     }
   }
@@ -71,14 +72,15 @@ class ArticleService implements IArticlesService {
     id: number,
     formData: IArticleForm,
   ): Promise<void | ServiceError> {
-    const { userName, title, content, published, date, tags } =
+    const { userName, title, content, is_published, date, tags } =
       (await this.parseArticleData(formData)) as IArticleForm;
+
     try {
       await sql`
         UPDATE articles
         SET title = ${title},
             content = ${content},
-            is_published = ${published},
+            is_published = ${is_published},
             updating_date = ${date},
             tags_array = ${tags as any}
         WHERE id=${id};
@@ -128,7 +130,10 @@ class ArticleService implements IArticlesService {
 
 const articles = new ArticleService();
 
-const getArticles = async () => await articles.getArticles();
+const getArticles = async () => {
+  noStore();
+  return await articles.getArticles();
+};
 
 const getArticleById = async (id: number) => await articles.getArticleById(id);
 
@@ -138,7 +143,10 @@ const createArticle = async (formData: IArticleForm) =>
 const updateArticle = async (id: number, formData: IArticleForm) =>
   await articles.updateArticle(id, formData);
 
-const deleteArticle = async (id: number) => await articles.deleteArticle(id);
+const deleteArticle = async (id: number) => {
+  await articles.deleteArticle(id);
+  redirect("/dashboard/articles");
+};
 
 export {
   getArticles,

@@ -1,12 +1,16 @@
 "use client";
-import { useState, useEffect, ChangeEvent, useReducer } from "react";
-import { DashboardButton } from "@/app/ui/dashboard-button";
+import { useEffect, useReducer, useLayoutEffect } from "react";
 import MDEditor, { ContextStore } from "@uiw/react-md-editor";
 import rehypeSanitize from "rehype-sanitize";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { createArticle } from "@/app/lib/Articles.service";
+import {
+  createArticle,
+  deleteArticle,
+  updateArticle,
+} from "@/app/lib/Articles.service";
 import { Article } from "@/app/page";
 import Hint from "@/app/ui/dashboard/hint";
+import { IArticle } from "@/app/lib/definitions";
 
 const DEFAULT_CONTENT = "";
 const MESSAGE_DELAY = 5000;
@@ -19,11 +23,12 @@ enum FormActionsTypes {
   CHECK = "CHECK",
   SET_MARKDOWN = "SET_MARKDOWN",
   SET_DEFAULT_STATE = "SET_DEFAULT_STATE",
+  TOGGLE_DELETE_WARNING = "TOGGLE_DELETE_WARNING",
 }
 
 interface FormAction {
   type: FormActionsTypes;
-  payload?: string;
+  payload?: string | boolean;
 }
 
 interface IFormState {
@@ -31,6 +36,7 @@ interface IFormState {
   message: string;
   isChecked: boolean;
   markdownSource: string;
+  warning: boolean;
 }
 
 const initialFormState: IFormState = {
@@ -38,6 +44,7 @@ const initialFormState: IFormState = {
   message: "",
   isChecked: true,
   markdownSource: DEFAULT_CONTENT,
+  warning: false,
 };
 
 function formReducer(state: IFormState, action: FormAction): IFormState {
@@ -59,26 +66,41 @@ function formReducer(state: IFormState, action: FormAction): IFormState {
       };
     }
     case FormActionsTypes.CHECK: {
-      return {
-        ...state,
-        isChecked: !state.isChecked,
-      };
+      if (typeof payload === "boolean") {
+        return {
+          ...state,
+          isChecked: payload || !state.isChecked,
+        };
+      }
     }
     case FormActionsTypes.SET_MARKDOWN: {
-      return {
-        ...state,
-        markdownSource: payload || DEFAULT_CONTENT,
-      };
+      if (typeof payload === "string") {
+        return {
+          ...state,
+          markdownSource: payload || DEFAULT_CONTENT,
+        };
+      }
     }
     case FormActionsTypes.SET_DEFAULT_STATE: {
       return { ...initialFormState };
+    }
+    case FormActionsTypes.TOGGLE_DELETE_WARNING: {
+      return {
+        ...state,
+        warning: !state.warning,
+      };
     }
     default:
       return state;
   }
 }
 
-export default function CreateArticle() {
+interface IArticleFormProps {
+  article: IArticle | undefined;
+  type: "create" | "update";
+}
+
+export const ArticleForm = ({ article, type }: IArticleFormProps) => {
   const {
     register,
     handleSubmit,
@@ -91,11 +113,18 @@ export default function CreateArticle() {
     dispatch({ type: FormActionsTypes.CHECK });
   };
   let timeoutId: ReturnType<typeof setTimeout>;
+
   const submit: SubmitHandler<ArticleInputs> = async (data) => {
     try {
       //todo check types here
 
-      await createArticle(data as any);
+      if (type === "create") {
+        await createArticle(data as any);
+      }
+      if (type === "update") {
+        await updateArticle(article!.id, data as any);
+      }
+
       dispatch({ type: FormActionsTypes.SUCCEED });
       reset({
         title: "",
@@ -110,6 +139,27 @@ export default function CreateArticle() {
       dispatch({ type: FormActionsTypes.FAILED, payload: error?.message });
     }
   };
+
+  const deleteCurrentArticle = async () => {
+    await deleteArticle(article!.id);
+  };
+
+  // const handleDelete = () => {};
+
+  useLayoutEffect(() => {
+    if (article) {
+      dispatch({
+        type: FormActionsTypes.SET_MARKDOWN,
+        payload: article.content,
+      });
+      reset({
+        title: article.title,
+        content: article.content,
+        tags: article.tags_array?.toString(),
+        is_published: article.is_published,
+      });
+    }
+  }, []);
 
   useEffect(() => {
     setValue("content", state.markdownSource);
@@ -182,9 +232,22 @@ export default function CreateArticle() {
             {...register("is_published", { required: true })}
           />
         </div>
-        <button className="btn-dashboard-primary self-center" type="submit">
-          Send
-        </button>
+        <div className="flex items-center gap-8 self-center">
+          <button className="btn-dashboard-primary self-center" type="submit">
+            Send
+          </button>
+          {type === "update" && (
+            <button
+              onClick={() =>
+                dispatch({ type: FormActionsTypes.TOGGLE_DELETE_WARNING })
+              }
+              type="button"
+              className="btn-dashboard-outline cancel-colors"
+            >
+              {state.warning ? "Abort" : "Delete"}
+            </button>
+          )}
+        </div>
         {state.status === "succeed" && (
           <p className="descriptor w-[100%] self-center rounded-lg bg-green-500 p-4 text-center text-white">
             {state.message}
@@ -195,7 +258,25 @@ export default function CreateArticle() {
             {state.message}
           </p>
         )}
+        {state.warning && (
+          <div className="flex w-[100%] items-center justify-center gap-4 rounded-lg bg-red-500 p-4 text-center">
+            <p className="descriptor  text-white">
+              Art you sure that you want to delete article?
+            </p>
+            <button
+              onClick={deleteCurrentArticle}
+              type="button"
+              className="btn-dashboard-outline"
+            >
+              Confirm
+            </button>
+          </div>
+        )}
       </form>
     </div>
   );
+};
+
+{
+  /* <p className="descriptor w-[100%] self-center rounded-lg bg-red-500 p-4 text-center text-white"> */
 }

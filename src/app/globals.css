@@ -15,15 +15,19 @@
 
   .btn-dashboard-primary {
     /* @apply mb-2 me-2 w-fit rounded-lg bg-sky-600 px-5 py-2.5 text-center text-sm font-medium text-white transition duration-500 ease-in-out hover:bg-sky-500 dark:bg-slate-800 dark:hover:bg-slate-700; */
-    @apply mb-2 me-2 w-fit rounded-lg bg-sky-600 px-4 py-2 text-center text-sm font-medium text-white transition duration-500 ease-in-out hover:scale-[1.025] hover:bg-sky-500;
+    @apply w-fit rounded-lg bg-sky-600 px-4 py-2 text-center text-sm font-medium text-white transition duration-500 ease-in-out hover:scale-[1.025] hover:bg-sky-500;
   }
 
   .btn-dashboard-outline {
     @apply btn-dashboard-primary border bg-transparent hover:bg-transparent;
   }
 
+  .cancel-colors {
+    @apply border-red-600 text-red-600 hover:border-red-500  hover:text-red-500;
+  }
+
   .btn-dashboard-cancel {
-    @apply btn-dashboard-outline border-red-600 text-red-600 hover:border-red-500  hover:text-red-500;
+    @apply btn-dashboard-outline cancel-colors;
   }
   .paragraph {
     /* @apply text-gray-500 dark:text-gray-400; */

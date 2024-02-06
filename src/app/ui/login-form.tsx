@@ -1,7 +1,7 @@
 "use client";
 import { Button } from "./button";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { authenticate } from "../lib/utils";
+import { login } from "../lib/Session.service";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { IUser } from "../lib/definitions";
@@ -20,9 +20,9 @@ export const LoginForm = () => {
   const [fetchError, setError] = useState<string>("");
   const router = useRouter();
 
-  const onSubmit: SubmitHandler<ILoginInputs> = async (data) => {
+  const onSubmit: SubmitHandler<ILoginInputs> = async (data: ILoginInputs) => {
     try {
-      await authenticate(data);
+      await login(data);
       router.replace("/dashboard/profile");
     } catch (error) {
       console.error("error", error);
@@ -36,13 +36,13 @@ export const LoginForm = () => {
         id="authentication-modal"
         tabIndex={-1}
         aria-hidden="true"
-        className=" overflow-y-auto overflow-x-hidden z-50 justify-center items-center m-auto"
+        className=" z-50 m-auto items-center justify-center overflow-y-auto overflow-x-hidden"
       >
-        <div className="relative p-4 w-[400px] max-w-md max-h-full">
+        <div className="relative max-h-full w-[400px] max-w-md p-4">
           {/* <!-- Modal content --> */}
-          <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
+          <div className="relative rounded-lg bg-white shadow dark:bg-gray-700">
             {/* <!-- Modal header --> */}
-            <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+            <div className="flex items-center justify-between rounded-t border-b p-4 md:p-5 dark:border-gray-600">
               <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
                 Sign in to our platform
               </h3>
@@ -50,21 +50,21 @@ export const LoginForm = () => {
             {/* <!-- Modal body --> */}
             <div className="p-4 md:p-5">
               <form
-                className="space-y-4 flex flex-col"
+                className="flex flex-col space-y-4"
                 onSubmit={handleSubmit(onSubmit)}
                 noValidate
               >
                 <div>
                   <label
                     htmlFor="email"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
                   >
                     Your email
                   </label>
                   <input
                     type="email"
                     id="email"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                    className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-500 dark:bg-gray-600 dark:text-white dark:placeholder-gray-400"
                     placeholder="name@company.com"
                     {...register("email", { required: true })}
                   />
@@ -72,7 +72,7 @@ export const LoginForm = () => {
                 <div>
                   <label
                     htmlFor="password"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
                   >
                     Your password
                   </label>
@@ -80,7 +80,7 @@ export const LoginForm = () => {
                     type="password"
                     id="password"
                     placeholder="••••••••"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                    className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-500 dark:bg-gray-600 dark:text-white dark:placeholder-gray-400"
                     {...register("password", { required: true })}
                   />
                 </div>

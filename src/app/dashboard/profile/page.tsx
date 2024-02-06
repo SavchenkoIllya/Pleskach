@@ -1,17 +1,15 @@
-// import { getUser } from "@/app/lib/action";
-// import { getUsers } from "@/app/lib/action";
 import { getUsers } from "@/app/lib/User.service";
 import { IUser } from "@/app/lib/definitions";
-import { UserProfile } from "@/app/ui/dashboard/user-profile";
+import { UserProfiles } from "@/app/ui/dashboard/user-profile";
 import { Suspense } from "react";
 import Link from "next/link";
 import { Header } from "@/app/ui/ui/dashboard/header";
 
 export default async function Profile() {
-  let data: IUser[] = [];
+  let users: IUser[] = [];
   await getUsers().then((res) => {
     if (res instanceof Array && res.length > 0) {
-      data = res;
+      users = res;
     }
   });
   return (
@@ -27,15 +25,15 @@ export default async function Profile() {
       >
         <>
           <Header>
-            <button className="btn-dashboard-primary m-0 flex items-center gap-4 shadow-lg shadow-accent/50 transition-all hover:translate-y-1">
+            <Link
+              href={"/dashboard/profile/create"}
+              className="btn-dashboard-primary m-0 flex items-center gap-4 shadow-lg shadow-accent/50 transition-all hover:translate-y-1"
+            >
               <span>Create new user</span>
               <span className="text-2xl">+</span>
-            </button>
+            </Link>
           </Header>
-
-          {data.map((el: IUser) => (
-            <UserProfile key={el.id} user={el} />
-          ))}
+          <UserProfiles users={users} />
         </>
       </Suspense>
     </>

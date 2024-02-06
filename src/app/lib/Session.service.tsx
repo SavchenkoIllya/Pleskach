@@ -2,19 +2,21 @@
 import { auth, signIn, signOut } from "@/auth";
 import { Session } from "next-auth";
 import { ServiceError } from "./definitions";
+import { IUser } from "./definitions";
+
+interface ILoginInputs extends Partial<IUser> {
+  password: string;
+}
 
 export interface ISessionUserService {
-  login(formData: FormData): Promise<void | ServiceError>;
+  login(formData: ILoginInputs): Promise<void | ServiceError>;
   getUserSession(): Promise<Session | ServiceError | null>;
   logout(): Promise<void | ServiceError>;
 }
 
 class SessionUserServices implements ISessionUserService {
-  async login(formData: FormData) {
-    const { email, password } = {
-      email: formData.get("email"),
-      password: formData.get("password"),
-    };
+  async login(formData: ILoginInputs) {
+    const { email, password } = formData;
     try {
       await signIn("credentials", {
         email: email,
@@ -54,7 +56,7 @@ const getSession = async () => userSession.getUserSession();
  * @param formData email and password
  * @returns
  */
-const login = async (formData: FormData) => userSession.login(formData);
+const login = async (formData: ILoginInputs) => userSession.login(formData);
 const logout = async () => userSession.logout();
 
 export { getSession, login, logout };

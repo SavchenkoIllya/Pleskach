@@ -4,7 +4,7 @@
 // import CustomPagination from "@/app/ui/dashboard/pagination-core";
 // import { Suspense } from "react";
 // import clsx from "clsx";
-import { PostSkeleton } from "@/app/ui/suspense/posts-suspence";
+// import { PostSkeleton } from "@/app/ui/suspense/posts-suspence";
 
 export default async function Posts(req: { params: { pageNumber: number } }) {
   // const page = Number(req.params.pageNumber) || 1;
@@ -18,7 +18,7 @@ export default async function Posts(req: { params: { pageNumber: number } }) {
   // };
 
   return (
-    <div className="flex min-h-[100dvh] flex-col items-center justify-between p-4">
+    <div className="flex flex-col items-center justify-between p-4">
       {/* <div className="flex justify-center items-center gap-4 flex-col">
         <Suspense fallback={<PostSkeleton />}>
           {posts?.map((el: any) => {

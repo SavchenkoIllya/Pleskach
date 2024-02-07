@@ -20,5 +20,5 @@ export const UserSchema = z.object({
 export const PostSchema = z.object({
   name: z.string().min(3),
   telephone: z.string().min(8),
-  problem: z.string().min(20),
+  problem: z.string(),
 });

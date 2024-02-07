@@ -1,8 +1,9 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
-import { deletePost, markPostAsRead } from "@/app/lib/utils";
+// import { deletePost, markPostAsRead } from "@/app/lib/utils";
+import { deletePost, markPostAsRead } from "@/app/lib/Posts.service";
 import clsx from "clsx";
-
+import { useParams } from "next/navigation";
 type DropdownProps = {
   id: number;
 };
@@ -10,17 +11,22 @@ type DropdownProps = {
 export default function Dropdown({ id }: DropdownProps) {
   const [isOpened, setOpened] = useState<boolean>(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const params = useParams();
+  const { pageNumber } = params;
 
   const handleMark = (e: any) => {
-    e.preventDefault();
-    markPostAsRead(id);
-    setOpened((prev) => !prev);
+    // e.preventDefault();
+    console.log("marked");
+
+    markPostAsRead(id, Number(pageNumber));
+    // setOpened((prev) => !prev);
   };
 
   const handleDelete = (e: any) => {
-    e.preventDefault();
-    deletePost(id);
-    setOpened((prev) => !prev);
+    console.log("deleted");
+    // e.preventDefault();
+    deletePost(id, Number(pageNumber));
+    // setOpened((prev) => !prev);
   };
 
   useEffect(() => {
@@ -29,11 +35,14 @@ export default function Dropdown({ id }: DropdownProps) {
         setOpened(false);
       }
     };
+    if (document) {
+      const el = document.getElementById("dashboard-wrapper");
 
-    if (isOpened) {
-      document.addEventListener("click", handleOutsideClick);
-    } else {
-      document.removeEventListener("click", handleOutsideClick);
+      if (isOpened) {
+        document.addEventListener("click", handleOutsideClick);
+      } else {
+        document.removeEventListener("click", handleOutsideClick);
+      }
     }
 
     return () => {
@@ -41,15 +50,19 @@ export default function Dropdown({ id }: DropdownProps) {
     };
   }, [isOpened]);
 
-  const handleClick = () => {
-    setOpened((prev) => !prev);
+  const handleToggle = () => {
+    setOpened(!isOpened);
+    console.log("toggled");
   };
 
   return (
-    <div ref={dropdownRef} className="flex flex-col relative">
+    <div
+      // ref={dropdownRef}
+      className="relative flex flex-col"
+    >
       <button
-        className="flex flex-col justify-between items-center"
-        onClick={handleClick}
+        className="flex flex-col items-center justify-between"
+        onClick={handleToggle}
       >
         <svg
           height={25}
@@ -65,24 +78,53 @@ export default function Dropdown({ id }: DropdownProps) {
         </svg>
       </button>
 
+      <div
+        className={clsx(
+          "soft-shadow absolute right-0 z-10 rounded-lg bg-white opacity-0",
+          isOpened ? "block opacity-100" : "hidden",
+        )}
+      >
+        <ul
+          className="w-max rounded-lg text-sm text-gray-700"
+          aria-labelledby="dropdownMenuIconButton"
+        >
+          <li>
+            <button
+              onClick={handleMark}
+              className="block w-[100%] rounded-t-lg px-4 py-2 text-left hover:bg-gray-100"
+            >
+              Mark as read
+            </button>
+          </li>
+          <li>
+            <button
+              onClick={handleDelete}
+              className="block w-[100%] rounded-b-lg bg-rose-700 px-4 py-2 text-left text-white hover:bg-rose-600 "
+            >
+              Delete
+            </button>
+          </li>
+        </ul>
+      </div>
+
       {/* {isOpened && ( */}
-      <>
+      {/* <>
         <div
-          ref={dropdownRef}
+          // ref={dropdownRef}
           id="dropdownDots"
           className={clsx(
-            "z-10 bg-white transition absolute right-0 divide-gray-100 rounded-lg shadow w-40",
-            isOpened ? "opacity-100 mt-0" : "opacity-0 -mt-8"
+            "absolute right-0 z-10 w-40 divide-gray-100 rounded-lg bg-white shadow transition",
+            isOpened ? "opacity-100" : "opacity-0",
           )}
         >
           <ul
-            className="text-sm text-gray-700 rounded-lg dark:text-gray-200"
+            className="rounded-lg text-sm text-gray-700 dark:text-gray-200"
             aria-labelledby="dropdownMenuIconButton"
           >
             <li>
               <button
                 onClick={handleMark}
-                className="block text-left w-[100%] px-4 py-2 hover:bg-gray-100 rounded-t-lg"
+                className="block w-[100%] rounded-t-lg px-4 py-2 text-left hover:bg-gray-100"
               >
                 Mark as read
               </button>
@@ -90,14 +132,14 @@ export default function Dropdown({ id }: DropdownProps) {
             <li>
               <button
                 onClick={handleDelete}
-                className="block px-4 text-white text-left w-[100%] py-2 hover:bg-rose-600 rounded-b-lg bg-rose-700 "
+                className="block w-[100%] rounded-b-lg bg-rose-700 px-4 py-2 text-left text-white hover:bg-rose-600 "
               >
                 Delete
               </button>
             </li>
           </ul>
         </div>
-      </>
+      </> */}
       {/* )} */}
     </div>
   );

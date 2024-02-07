@@ -23,6 +23,8 @@ export const Sidebar = () => {
       }
     };
 
+    console.log(sidebarRef.current?.offsetWidth);
+
     if (isOpened) {
       document.addEventListener("click", handleOutsideClick);
     } else {
@@ -40,30 +42,11 @@ export const Sidebar = () => {
 
   return (
     <>
-      <button
-        onClick={handleClick}
-        className={clsx(
-          "btn-dashboard-primary transition-all fixed ml-4 mt-8 h-fit md:hidden",
-          isOpened && "hidden",
-        )}
-      >
-        <svg
-          fill="white"
-          stroke="white"
-          height={20}
-          width={20}
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 24 24"
-        >
-          <title>menu</title>
-          <path d="M3,6H21V8H3V6M3,11H21V13H3V11M3,16H21V18H3V16Z" />
-        </svg>
-      </button>
       <aside
         ref={sidebarRef}
         className={clsx(
-          "z-[5] mx-4 my-8 flex min-w-[300px] flex-col gap-8 rounded-lg bg-white p-8 shadow-xl transition-all duration-300 md:ml-4",
-          isOpened ? "ml-4" : "-ml-80",
+          "relative z-[5] mx-4 my-8 flex min-w-[300px] flex-col gap-8 rounded-lg bg-white p-8 shadow-xl transition-all duration-300 md:ml-4",
+          isOpened ? "ml-4" : "ml-[-300px]",
         )}
         id="sidebar"
       >
@@ -90,6 +73,25 @@ export const Sidebar = () => {
           </nav>
         </div>
       </aside>
+      <button
+        onClick={handleClick}
+        className={clsx(
+          "btn-dashboard-primary sticky ml-4 mt-8 h-fit transition-all md:hidden",
+          isOpened && "hidden",
+        )}
+      >
+        <svg
+          fill="white"
+          stroke="white"
+          height={20}
+          width={20}
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+        >
+          <title>menu</title>
+          <path d="M3,6H21V8H3V6M3,11H21V13H3V11M3,16H21V18H3V16Z" />
+        </svg>
+      </button>
     </>
   );
 };

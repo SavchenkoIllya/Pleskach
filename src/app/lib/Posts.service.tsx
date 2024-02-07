@@ -7,7 +7,7 @@ import { sql } from "@vercel/postgres";
 import { revalidatePath } from "next/cache";
 import { PostSchema } from "./Schemes";
 
-interface IPaginatedPosts {
+export interface IPaginatedPosts {
   totalContent: number;
   contentOnPage: number;
   data: IPosts[] | null;
@@ -33,13 +33,14 @@ class PostsService implements IPostsService {
     const validatedFields = PostSchema.safeParse({
       name: formData.name,
       telephone: formData.telephone,
-      problem: formData.telephone,
+      problem: formData.problem,
     });
+
     if (!validatedFields.success) return validatedFields.error;
     const { name, telephone, problem } = PostSchema.parse({
       name: formData.name,
       telephone: formData.telephone,
-      problem: formData.telephone,
+      problem: formData.problem,
     });
     const date = getCurrentDate();
 
@@ -58,7 +59,7 @@ class PostsService implements IPostsService {
         OFFSET (${pageNum} - 1) * ${POSTS_ON_PAGE};
         `;
 
-      const postsAmount = sql`
+      const postsAmount = await sql`
         SELECT COUNT(*) AS total_rows
         FROM posts;
         `;
@@ -86,6 +87,7 @@ class PostsService implements IPostsService {
             VALUES (${name}, ${telephone}, ${problem}, ${date as string})
             `;
       } catch (error) {
+        console.log(error);
         return { message: "Cannot create new post" };
       }
     }

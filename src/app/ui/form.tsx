@@ -23,16 +23,18 @@ export const Form = () => {
   const [fetchSuccess, setSuccess] = useState<string>("");
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
+    console.log(data);
+    
     try {
       await createPost(data);
-      setSuccess(
-        "Your message was successfully sent. Wait when doctor contact you.",
-      );
-      reset({
-        name: "",
-        telephone: "",
-        problem: "",
-      });
+      // setSuccess(
+      //   "Your message was successfully sent. Wait when doctor contact you.",
+      // );
+      // reset({
+      //   name: "",
+      //   telephone: "",
+      //   problem: "",
+      // });
     } catch (error) {
       console.error("error", error);
       setError("Your message wasn't sent");

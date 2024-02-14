@@ -7,7 +7,7 @@ import defaultPicture from "@/app/assets/Medical_Science_Kolleg.jpg";
 import { Remark } from "react-remark";
 import { IComponentProps } from "./types/types";
 
-interface ICard extends IComponentProps {
+interface ICard extends IComponentProps, Partial<IArticle> {
   id: number;
   title: string;
   imgSrc?: string;
@@ -15,20 +15,33 @@ interface ICard extends IComponentProps {
   content: string;
 }
 
-export const Card = ({ title, imgSrc, link, content, id, ...props }: ICard) => {
+import { Cormorant_Garamond } from "next/font/google";
+import { IArticle } from "../lib/definitions";
+const Cormorant = Cormorant_Garamond({ weight: "400", subsets: ["cyrillic"] });
+
+export const MainCards = ({
+  title,
+  imgSrc,
+  link,
+  content,
+  id,
+  tags_array,
+  ...props
+}: ICard) => {
+  const tags = ["#otsosi", "#cardiology"];
   let restContent: string = content.split(")")[1];
   let image = content.split(")")[0].match(/https?:\/\/[^\s]+/)?.[0];
 
   return (
     <article
-      className="w-[300px] rounded-lg bg-background shadow-xl shadow-accent/15 transition-transform hover:scale-[1.025]"
+      className="relative w-[500px] rounded-lg bg-[#19092B] transition-transform"
       {...props}
     >
       <Link href={link}>
         <img
           className="[object-position:50% 50%]
         w-[100%]
-        rounded-t-lg
+        rounded-lg
         [aspect-ratio:4/3] [object-fit:cover]
         "
           src={imgSrc || image || defaultPicture.src}
@@ -36,16 +49,33 @@ export const Card = ({ title, imgSrc, link, content, id, ...props }: ICard) => {
         />
       </Link>
       <div className="p-5">
+        <div className="flex gap-2">
+          {tags.map((el, idx) => {
+            return (
+              <p
+                key={el}
+                className="rounded-full bg-[#E5B5FF] px-2 py-1 text-xs uppercase text-[#19092B]"
+              >
+                {el}
+              </p>
+            );
+          })}
+        </div>
         <Link href={link}>
-          <Heading
+          <h1
+            className={`h1 mt-2 relative leading-normal text-[1.5rem] text-amber-400 ${Cormorant.className} [-webkit-box-orient:vertical] [-webkit-line-clamp:2] [overflow:hidden]`}
+          >
+            {title}
+          </h1>
+          {/* <Heading
             className="mb-2 h-[64px] tracking-tight text-heading [-webkit-box-orient:vertical] 
             [-webkit-line-clamp:2]   
             [overflow:hidden]"
           >
             {title}
-          </Heading>
+          </Heading> */}
         </Link>
-        <div
+        {/* <div
           className="mb-3 h-[72px] 
                     text-plane-text 
                     [-webkit-box-orient:vertical]   
@@ -53,10 +83,10 @@ export const Card = ({ title, imgSrc, link, content, id, ...props }: ICard) => {
                     [display:-webkit-box]"
         >
           <Remark>{restContent ? restContent : content}</Remark>
-        </div>
+        </div> */}
         <Link
           href={link}
-          className="inline-flex items-center rounded-lg text-center text-sm font-medium text-accent focus:outline-none focus:ring-4"
+          className="inline-flex items-center rounded-lg text-center text-sm font-medium text-[#E5B5FF] focus:outline-none focus:ring-4"
         >
           Read more
           <svg

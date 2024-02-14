@@ -3,6 +3,7 @@ import { auth, signIn, signOut } from "@/auth";
 import { Session } from "next-auth";
 import { ServiceError } from "./definitions";
 import { IUser } from "./definitions";
+import { revalidatePath } from "next/cache";
 
 interface ILoginInputs extends Partial<IUser> {
   password: string;
@@ -57,6 +58,9 @@ const getSession = async () => userSession.getUserSession();
  * @returns
  */
 const login = async (formData: ILoginInputs) => userSession.login(formData);
-const logout = async () => userSession.logout();
+const logout = async () => {
+  userSession.logout();
+  revalidatePath("/");
+};
 
 export { getSession, login, logout };

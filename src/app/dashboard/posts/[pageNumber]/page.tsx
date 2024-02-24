@@ -1,9 +1,9 @@
 // import { getPaginatedPosts } from "@/app/lib/action";
-import { IPosts } from "@/app/lib/definitions";
+// import { IPosts } from "@/app/lib/definitions";
 import { Message } from "@/app/ui/dashboard/message";
 import CustomPagination from "@/app/ui/dashboard/pagination-core";
 import { Suspense } from "react";
-import clsx from "clsx";
+// import clsx from "clsx";
 import { PostSkeleton } from "@/app/ui/suspense/posts-suspence";
 import { IPaginatedPosts, getPaginatedPosts } from "@/app/lib/Posts.service";
 
@@ -27,21 +27,20 @@ export default async function Posts(req: { params: { pageNumber: number } }) {
     <div className="flex flex-col items-center justify-between p-4">
       <div className="flex flex-col items-center justify-center gap-4">
         <Suspense fallback={<PostSkeleton />}>
-          {posts?.map((el: any) => {
+          {posts?.map(({ id, name, telephone, problem, is_read, date }) => {
             return (
               <Message
                 page={page}
-                key={el.id}
-                id={el.id}
-                name={el.name}
-                telephone={el.telephone}
-                problem={el.problem}
-                is_read={el.is_read}
-                date={el.date}
+                key={id}
+                id={id}
+                name={name}
+                telephone={telephone}
+                problem={problem}
+                is_read={is_read}
+                date={ date}
               />
             );
           })}
-          {!posts && <p className="">1233</p>}
         </Suspense>
       </div>
       <Suspense>

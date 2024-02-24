@@ -75,7 +75,6 @@ export const UserForm = ({ user }: IUserFormProps) => {
 
   const submit = async (data: any) => {
     try {
-      // submitCallback();
     } catch (error: any) {
       setError("root", {
         message: error.message,
@@ -94,7 +93,7 @@ export const UserForm = ({ user }: IUserFormProps) => {
           Name
         </label>
         <input
-          className="input-outlined"
+          className="input-outlined text-gray-400"
           type="name"
           id="name_input"
           placeholder=" "
@@ -108,7 +107,7 @@ export const UserForm = ({ user }: IUserFormProps) => {
       <div className="group relative z-0 mb-5 w-full">
         <label htmlFor="email">E-mail</label>
         <input
-          className="input-outlined"
+          className="input-outlined text-gray-400"
           type="email"
           id="email_input"
           placeholder=" "
@@ -123,7 +122,7 @@ export const UserForm = ({ user }: IUserFormProps) => {
       <div className="group relative z-0 mb-5 w-full">
         <label htmlFor="phone">Phone</label>
         <input
-          className="input-outlined"
+          className="input-outlined text-gray-400"
           type="tel"
           id="phone_input"
           placeholder="+ 1 234 56 78 09"
@@ -138,7 +137,7 @@ export const UserForm = ({ user }: IUserFormProps) => {
       <div className="group relative z-0 mb-5 w-full">
         <label htmlFor="whatsapp_link">What'sApp link</label>
         <input
-          className="input-outlined"
+          className="input-outlined text-gray-400"
           type="text"
           id="what'sapp_link"
           placeholder=" "
@@ -153,7 +152,7 @@ export const UserForm = ({ user }: IUserFormProps) => {
       <div className="group relative z-0 mb-5 w-full">
         <label htmlFor="telgram_link">Telegram link</label>
         <input
-          className="input-outlined"
+          className="input-outlined text-gray-400"
           type="text"
           id="telgram_link_id"
           placeholder=" "

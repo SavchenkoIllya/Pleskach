@@ -1,12 +1,13 @@
 "use client";
-import { useState, useEffect, ChangeEvent, useReducer } from "react";
-import { DashboardButton } from "@/app/ui/dashboard-button";
-import MDEditor, { ContextStore } from "@uiw/react-md-editor";
+import { useEffect, useReducer } from "react";
+import MDEditor from "@uiw/react-md-editor";
 import rehypeSanitize from "rehype-sanitize";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { createArticle } from "@/app/lib/Articles.service";
 import { Article } from "@/app/page";
 import Hint from "@/app/ui/dashboard/hint";
+import { Header } from "@/app/ui/ui/dashboard/header";
+import Link from "next/link";
 
 const DEFAULT_CONTENT = "";
 const MESSAGE_DELAY = 5000;
@@ -121,6 +122,23 @@ export default function CreateArticle() {
 
   return (
     <div className="flex flex-col items-center p-4">
+      <Header>
+        <Link
+          href="/dashboard/articles"
+          className="btn-dashboard-primary m-0 flex items-center gap-4 leading-8 shadow-lg shadow-accent/50 transition-all"
+        >
+          <svg
+            width={20}
+            height={20}
+            fill="white"
+            viewBox="0 0 320 512"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path d="M224 480c-8.188 0-16.38-3.125-22.62-9.375l-192-192c-12.5-12.5-12.5-32.75 0-45.25l192-192c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25L77.25 256l169.4 169.4c12.5 12.5 12.5 32.75 0 45.25C240.4 476.9 232.2 480 224 480z" />
+          </svg>
+          <span>Back</span>
+        </Link>
+      </Header>
       <form
         className="dark:bg-dashboard-wrapper mt-4 flex flex-col gap-4 rounded-2xl bg-none p-4 md:mt-8 md:p-10"
         onSubmit={handleSubmit(submit)}

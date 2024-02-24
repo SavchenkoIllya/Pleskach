@@ -72,7 +72,7 @@ class ArticleService implements IArticlesService {
     id: number,
     formData: IArticleForm,
   ): Promise<void | ServiceError> {
-    const { userName, title, content, is_published, date, tags } =
+    const { title, content, is_published, date, tags } =
       (await this.parseArticleData(formData)) as IArticleForm;
 
     try {
@@ -135,7 +135,10 @@ const getArticles = async () => {
   return await articles.getArticles();
 };
 
-const getArticleById = async (id: number) => await articles.getArticleById(id);
+const getArticleById = async (id: number) => {
+  noStore();
+  return await articles.getArticleById(id);
+};
 
 const createArticle = async (formData: IArticleForm) =>
   await articles.createArticles(formData);

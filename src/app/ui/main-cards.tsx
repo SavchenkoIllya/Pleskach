@@ -17,25 +17,35 @@ interface ICard extends IComponentProps, Partial<IArticle> {
 
 import { Cormorant_Garamond } from "next/font/google";
 import { IArticle } from "../lib/definitions";
+import clsx from "clsx";
+import { twMerge } from "tailwind-merge";
+import { forwardRef } from "react";
 const Cormorant = Cormorant_Garamond({ weight: "400", subsets: ["cyrillic"] });
 
-export const MainCards = ({
-  title,
-  imgSrc,
-  link,
-  content,
-  id,
-  tags_array,
-  ...props
-}: ICard) => {
+const MainCards = forwardRef<HTMLDivElement, ICard>((props, ref) => {
+  const {
+    title,
+    imgSrc,
+    link,
+    content,
+    id,
+    tags_array,
+    className,
+    ...restProps
+  } = props;
+
   const tags = ["#otsosi", "#cardiology"];
-  let restContent: string = content.split(")")[1];
+  // let restContent: string = content.split(")")[1];
   let image = content.split(")")[0].match(/https?:\/\/[^\s]+/)?.[0];
 
   return (
     <article
-      className="relative w-[500px] rounded-lg bg-[#19092B] transition-transform"
-      {...props}
+      ref={ref}
+      className={twMerge(
+        "relative rounded-lg  transition-transform ",
+        clsx(className),
+      )}
+      {...restProps}
     >
       <Link href={link}>
         <img
@@ -48,7 +58,7 @@ export const MainCards = ({
           alt=""
         />
       </Link>
-      <div className="p-5">
+      <div className="py-5">
         <div className="flex gap-2">
           {tags.map((el, idx) => {
             return (
@@ -62,11 +72,11 @@ export const MainCards = ({
           })}
         </div>
         <Link href={link}>
-          <h1
-            className={`h1 mt-2 relative leading-normal text-[1.5rem] text-amber-400 ${Cormorant.className} [-webkit-box-orient:vertical] [-webkit-line-clamp:2] [overflow:hidden]`}
+          <p
+            className={`h1 relative mt-2 text-[1.5rem] leading-normal text-amber-400 ${Cormorant.className} line-clamp-2`}
           >
             {title}
-          </h1>
+          </p>
           {/* <Heading
             className="mb-2 h-[64px] tracking-tight text-heading [-webkit-box-orient:vertical] 
             [-webkit-line-clamp:2]   
@@ -108,4 +118,7 @@ export const MainCards = ({
       </div>
     </article>
   );
-};
+});
+
+MainCards.displayName = "MainCards";
+export { MainCards };

@@ -23,8 +23,6 @@ export const Sidebar = () => {
       }
     };
 
-    console.log(sidebarRef.current?.offsetWidth);
-
     if (isOpened) {
       document.addEventListener("click", handleOutsideClick);
     } else {

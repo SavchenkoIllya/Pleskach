@@ -40,6 +40,18 @@
     /* @apply text-4xl font-bold dark:text-white; */
     @apply text-4xl font-bold text-gray-700;
   }
+  .h1-landing {
+    @apply h1 text-[3rem] leading-normal text-amber-400 md:text-[6rem];
+  }
+
+  .landing-content {
+    @apply container m-auto p-8 lg:p-0;
+  }
+
+  .btn-landing {
+    @apply btn-dashboard-outline border-[#E5B5FF] text-[#E5B5FF] transition-all duration-500 hover:bg-[#E5B5FF] hover:text-[#19092B];
+  }
+
   .h2 {
     /* @apply h1 text-2xl dark:text-white; */
     @apply h1 text-2xl;
@@ -79,6 +91,10 @@
     @apply shadow-[0_3px_10px_rgb(0,0,0,0.2)];
   }
 
+  /* .no-scroll::-webkit-scrollbar {
+    display: none;
+  } */
+
   .backlight {
     box-shadow:
       inset 0 0 50px #ffffff0f,
@@ -114,15 +130,15 @@ body {
 
 /* Track */
 ::-webkit-scrollbar-track {
-  background: #19092B;
+  background: #19092b;
 }
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: #E5B5FF;
+  background: #e5b5ff;
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-  background: #E5B5FF;
+  background: #e5b5ff;
 }

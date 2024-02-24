@@ -5,7 +5,7 @@ import { Header } from "@/app/ui/ui/dashboard/header";
 import Link from "next/link";
 
 interface PageProps {
-  searchParams: { [key: string]: string | string[] | undefined };
+  searchParams?: { [key: string]: string | string[] | undefined };
   size: number | string;
 }
 

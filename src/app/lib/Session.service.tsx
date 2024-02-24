@@ -24,7 +24,7 @@ class SessionUserServices implements ISessionUserService {
         password: password,
       });
     } catch (error) {
-      return { message: "Error. Cannot authenticate this user" };
+      return { message: "Error. Cannot authenticate this user", error };
     }
   }
 

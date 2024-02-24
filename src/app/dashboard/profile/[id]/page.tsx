@@ -1,10 +1,10 @@
-import { IUser } from "@/app/lib/definitions";
-import { BackButton } from "@/app/ui/dashboard/back-button";
+// import { IUser } from "@/app/lib/definitions";
+// import { BackButton } from "@/app/ui/dashboard/back-button";
 import { UserForm } from "@/app/ui/dashboard/user-profile";
 import { Header } from "@/app/ui/ui/dashboard/header";
 import Link from "next/link";
 
-export default async function UpdateUser({
+async function UpdateUser({
   searchParams,
   size = 20,
 }: {
@@ -38,3 +38,5 @@ export default async function UpdateUser({
     </>
   );
 }
+
+export default UpdateUser;

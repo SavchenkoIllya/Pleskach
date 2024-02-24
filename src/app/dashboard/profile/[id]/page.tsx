@@ -4,13 +4,12 @@ import { UserForm } from "@/app/ui/dashboard/user-profile";
 import { Header } from "@/app/ui/ui/dashboard/header";
 import Link from "next/link";
 
-async function UpdateUser({
-  searchParams,
-  size = 20,
-}: {
+interface PageProps {
   searchParams: { [key: string]: string | string[] | undefined };
   size: number | string;
-}) {
+}
+
+async function UpdateUser({ searchParams, size = 20 }: PageProps) {
   const user = { ...searchParams };
 
   return (

@@ -1,16 +1,10 @@
-// import { IUser } from "@/app/lib/definitions";
-// import { BackButton } from "@/app/ui/dashboard/back-button";
 import { UserForm } from "@/app/ui/dashboard/user-profile";
 import { Header } from "@/app/ui/ui/dashboard/header";
 import Link from "next/link";
 
-// interface PageProps {
-//   searchParams?: { [key: string]: string | string[] | undefined };
-// }
-
 async function UpdateUser(props) {
   const { searchParams } = props;
-  const user = {...searchParams}
+  const user = { ...searchParams };
   // const user = { ...searchParams };
   const size = 20;
   return (

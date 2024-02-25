@@ -5,7 +5,6 @@ import Link from "next/link";
 async function UpdateUser(props) {
   const { searchParams } = props;
   const user = { ...searchParams };
-  // const user = { ...searchParams };
   const size = 20;
   return (
     <>

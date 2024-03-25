@@ -1,0 +1,141 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  scroll-behavior: smooth;
+}
+
+@layer components {
+  /* .container-h {
+    min-height: calc(100dvh - 2rem);
+  } */
+
+  .dashboard__button-primary {
+    @apply w-fit rounded-lg bg-sky-600 px-4 py-2 text-center text-sm font-medium text-white transition duration-500 ease-in-out hover:scale-[1.025] hover:bg-sky-500;
+  }
+
+  .dashboard__button-outlined {
+    @apply dashboard__button-primary border bg-transparent hover:bg-transparent;
+  }
+
+  /* rename this */
+  .cancel-colors {
+    @apply border-red-600 text-red-600 hover:border-red-500  hover:text-red-500;
+  }
+
+  .input__failure-message {
+    @apply text-sm text-red-500;
+  }
+
+  .btn-dashboard-cancel {
+    @apply .dashboard__button-outlined cancel-colors;
+  }
+  .paragraph {
+    /* @apply text-gray-500 dark:text-gray-400; */
+    @apply text-gray-500;
+  }
+  .descriptor {
+    @apply paragraph text-sm;
+  }
+  .h1 {
+    /* @apply text-4xl font-bold dark:text-white; */
+    @apply text-4xl font-bold text-gray-700;
+  }
+  .h1-landing {
+    @apply h1 text-[3rem] leading-normal text-amber-400 md:text-[6rem];
+  }
+
+  .landing__container {
+    @apply container m-auto p-8 lg:p-0;
+  }
+
+  .h2 {
+    /* @apply h1 text-2xl dark:text-white; */
+    @apply h1 text-2xl;
+  }
+  .modal-bg {
+    /* @apply rounded-lg border border-gray-200 bg-white text-sm text-gray-500 shadow-xl transition duration-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-400; */
+    @apply rounded-lg border border-gray-200 bg-white text-sm text-gray-500 shadow-xl transition duration-300;
+  }
+  .bg-dashboard {
+    /* @apply bg-white dark:bg-slate-900; */
+    @apply bg-gray-100;
+  }
+  .bg-dashboard-wrapper {
+    /* @apply bg-[#F0F1FF] shadow-xl dark:bg-gray-950; */
+    @apply bg-white shadow-xl;
+  }
+  .input {
+    outline: none;
+    /* @apply mt-2 block w-full rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 placeholder-gray-300/50 dark:bg-slate-900 dark:border-none dark:text-gray-400; */
+    @apply mt-2 block w-full rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 placeholder-gray-300/50 transition focus:border-sky-600;
+  }
+
+  .input-outlined {
+    @apply input bg-transparent text-white placeholder:text-white/50;
+  }
+
+  .soft-shadow {
+    @apply shadow-[0_3px_10px_rgb(0,0,0,0.2)];
+  }
+
+  .landing__button {
+    @apply dashboard__button-outlined hover:text-landing-bg border-accent text-accent transition-all duration-500 hover:bg-accent;
+  }
+
+  .landing__card__image {
+    object-position: 50% 50%;
+    aspect-ratio: 4/3;
+    object-fit: cover;
+    width: 100%;
+    @apply rounded-lg;
+  }
+
+  .landing__text {
+    @apply leading-8 text-accent;
+  }
+
+  .landing__form__input {
+    @apply text-landing-input rounded-xl border border-accent bg-transparent p-2 outline-none md:min-w-[400px];
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --foreground-rgb: 255, 255, 255;
+      --background-start-rgb: 0, 0, 0;
+      --background-end-rgb: 0, 0, 0;
+    }
+  }
+
+  body {
+    color: rgb(var(--foreground-rgb));
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overscroll-behavior: none;
+  }
+
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 4px;
+  }
+
+  /* Track */
+  ::-webkit-scrollbar-track {
+    /* @apply bg-accent */
+    background: #19092b;
+  }
+
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #e5b5ff;
+  }
+
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #e5b5ff;
+  }
+}

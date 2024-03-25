@@ -5,11 +5,13 @@ import bcrypt from "bcryptjs";
 import type { NextAuthConfig } from "next-auth";
 import { NextResponse } from "next/server";
 
+const secretKey = "pMXEqOO3xX7Y2U3slnSqqIvdLwBczbHV3y3lqq12Btc=";
+
 export const authConfig = {
   pages: {
     signIn: "/dashboard/auth",
   },
-  secret: "pMXEqOO3xX7Y2U3slnSqqIvdLwBczbHV3y3lqq12Btc=",
+  secret: secretKey,
   callbacks: {
     authorized({ auth, request: { nextUrl } }) {
       const isLoggedIn = !!auth?.user;

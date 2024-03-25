@@ -16,8 +16,9 @@ const config: Config = {
       colors: {
         heading: "#3D3B40",
         "plane-text": "#616161",
-        accent: "#86B6F6",
-        background: "#EEF5FF",
+        accent: "#E5B5FF",
+        "landing-bg": "#19092B",
+        "landing-input": "#f7e7ff95",
         "message-read": "#F7F8FA",
       },
     },
